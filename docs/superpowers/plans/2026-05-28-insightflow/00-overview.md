@@ -46,6 +46,7 @@ When the rules below contradict task wording in any phase plan, **the rules here
 | C7 | **4 data types are locked.** | `ColumnType = 'number' \| 'category' \| 'text' \| 'date'`. Filter UX is type-driven (Category→dropdown, Text/Number/Date→input). |
 | C8 | **For non-tested files**, collapse TDD task steps. | If a plan task is "Step 1: Write test → Step 2: Run, verify FAIL → Step 3: Implement → Step 4: Run, verify PASS → Step 5: Commit" and the file is NOT in the TESTED ALLOWLIST, do just: "Step 1: Implement → Step 2: Commit". |
 | C9 | **Whenever a new constraint emerges**, add it here. Do not update every phase file. The phase files describe modules and code shape; this section describes global rules. |
+| C10 | **Local only — no GitHub, no Vercel.** | Project stays on the laptop. Skip the entire Phase 07 deploy task (Task 5 in `07-polish-and-deploy.md`). Skip the README "Live URL" line and "Vercel" mentions. Skip `vercel.json` creation (Task 4). Keep error-boundary + responsive-banner + README (without live URL). `Done = all of these` exit criterion "App deployed to Vercel with a public URL" is removed. |
 
 ### TESTED ALLOWLIST — modules that MUST have Vitest tests
 

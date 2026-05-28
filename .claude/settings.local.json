@@ -16,7 +16,8 @@
       "Bash(rm -f src/main.js vite.config.js vite.config.d.ts tsconfig.tsbuildinfo tsconfig.node.tsbuildinfo)",
       "Bash(git rm *)",
       "Bash(npm test *)",
-      "Bash(npx shadcn@latest add button input textarea label dialog dropdown-menu select table tooltip badge --yes)"
+      "Bash(npx shadcn@latest add button input textarea label dialog dropdown-menu select table tooltip badge --yes)",
+      "Bash(git tag *)"
     ]
   }
 }

@@ -30,8 +30,7 @@ export const useDataSourceTable = (_params?: UseDataSourceTableParams): DataSour
 
   const handleCreateReport = useCallback(
     (id: DataSourceId) => {
-      // Forward reference: /reports route is created in Phase 04
-      navigate({ to: '/reports' as never, search: { dataSourceId: id } as never })
+      navigate({ to: '/reports', search: { dataSourceId: id } })
     },
     [navigate]
   )

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useDataSourceById, useDataSourcesList } from '@/stores/data-sources.store'
 import { useReportsStore } from '@/stores/reports.store'
@@ -22,13 +22,19 @@ export const useAddReportDialog = (
   const [description, setDescription] = useState('')
   const [columnConfig, setColumnConfig] = useState<ColumnConfigMap>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Sync preselection when dialog opens — external trigger, justified useEffect
-  useEffect(() => {
-    if (open && preselectedDataSourceId) {
-      setSelectedDataSourceId(preselectedDataSourceId)
-    }
-  }, [open, preselectedDataSourceId])
+  // Track the last preselection we synced from props — re-sync when the prop changes.
+  // Compute-during-render is safer than useEffect (no cascading-renders lint).
+  const [lastSyncedPreselection, setLastSyncedPreselection] = useState<string>(
+    preselectedDataSourceId ?? ''
+  )
+  if (
+    open &&
+    preselectedDataSourceId !== undefined &&
+    preselectedDataSourceId !== lastSyncedPreselection
+  ) {
+    setSelectedDataSourceId(preselectedDataSourceId)
+    setLastSyncedPreselection(preselectedDataSourceId)
+  }
 
   const selectedDataSource = useDataSourceById(selectedDataSourceId ?? undefined)
 

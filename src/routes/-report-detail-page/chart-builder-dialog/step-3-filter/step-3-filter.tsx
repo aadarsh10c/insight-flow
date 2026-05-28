@@ -18,7 +18,7 @@ export const Step3Filter = (props: Step3FilterProps) => {
           )}
           <FilterRow
             filter={f}
-            availableColumns={view.filterableColumns}
+            availableColumns={view.availableColumnsFor(f.id)}
             rows={view.rows}
             labelOf={view.labelFor}
             onChange={(next) => view.handleUpdate(f.id, next)}

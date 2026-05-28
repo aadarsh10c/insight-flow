@@ -21,7 +21,7 @@ export const ReportTable = (_props: ReportTableProps) => {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center text-muted-foreground">
         <FileText className="mb-4 h-12 w-12 text-accent opacity-40" aria-hidden />
-        <p className="font-serif text-lg font-semibold text-foreground">No reports yet</p>
+        <p className="text-title text-foreground">No reports yet</p>
         <p className="mt-1 text-sm">Click "+ Add Report" to build your first chart.</p>
       </div>
     )

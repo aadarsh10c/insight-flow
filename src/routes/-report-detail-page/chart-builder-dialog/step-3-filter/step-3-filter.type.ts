@@ -14,7 +14,7 @@ export type Step3FilterProps = {
 
 export type Step3View = {
   filters: ReadonlyArray<FilterClause>
-  filterableColumns: ReadonlyArray<FilterableColumn>
+  availableColumnsFor: (filterId: string) => ReadonlyArray<FilterableColumn>
   rows: ReadonlyArray<RowData>
   labelFor: (column: string) => string
   handleAdd: () => void

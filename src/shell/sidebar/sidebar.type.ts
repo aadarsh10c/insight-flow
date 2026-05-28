@@ -18,5 +18,7 @@ export type SidebarView = {
   navItems: ReadonlyArray<SidebarNavItem>
   themeMode: ThemeMode
   themeLabel: string
-  handleCycleTheme: () => void
+  isCollapsed: boolean
+  handleToggleTheme: () => void
+  handleToggleCollapse: () => void
 }

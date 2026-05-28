@@ -115,3 +115,43 @@ html, body {
     transition: none !important;
   }
 }
+
+/* ============================================
+   Typography utilities (StyleGuide §4 — brand-first hierarchy)
+   Brand "InsightFlow" at 16px is the largest text in the app.
+   Nothing else exceeds it. One purpose per token.
+   ============================================ */
+@utility text-display {
+  font-size: 1.125rem;        /* 18px — reserved for hero / marketing only */
+  line-height: 1.25;
+  font-weight: 600;
+  font-family: var(--font-serif);
+}
+@utility text-title {
+  font-size: 1rem;            /* 16px — brand, page H1s, dialog titles */
+  line-height: 1.3;
+  font-weight: 600;
+  font-family: var(--font-serif);
+}
+@utility text-heading {
+  font-size: 0.9375rem;       /* 15px — card titles, section emphasis (sans) */
+  line-height: 1.4;
+  font-weight: 600;
+}
+@utility text-body {
+  font-size: 0.875rem;        /* 14px — default body */
+  line-height: 1.5;
+  font-weight: 400;
+}
+@utility text-small {
+  font-size: 0.8125rem;       /* 13px — helper text */
+  line-height: 1.5;
+  font-weight: 400;
+}
+@utility text-caption {
+  font-size: 0.6875rem;       /* 11px — labels, tags */
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

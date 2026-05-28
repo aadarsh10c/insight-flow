@@ -23,6 +23,12 @@ const BUCKET_LABELS: Record<TimeBucket, string> = {
 }
 const ALL_BUCKETS: TimeBucket[] = ['daily', 'weekly', 'monthly', 'quarterly', 'yearly']
 
+const toIsoDate = (raw: string): string => {
+  const t = Date.parse(raw)
+  if (Number.isNaN(t)) return ''
+  return new Date(t).toISOString().slice(0, 10)
+}
+
 const applyFilters = (
   rows: ReadonlyArray<Record<string, unknown>>,
   filters: ReadonlyArray<FilterClause>
@@ -34,6 +40,15 @@ const applyFilters = (
       const cellValue = r[f.column]
       if (f.predicate === 'contains') {
         return String(cellValue ?? '').toLowerCase().includes(String(f.values[0]).toLowerCase())
+      }
+      if (f.predicate === 'between') {
+        const cellIso = toIsoDate(String(cellValue ?? ''))
+        if (cellIso === '') return false
+        const from = f.values[0] === undefined || f.values[0] === null ? '' : String(f.values[0])
+        const to = f.values[1] === undefined || f.values[1] === null ? '' : String(f.values[1])
+        if (from !== '' && cellIso < from) return false
+        if (to !== '' && cellIso > to) return false
+        return true
       }
       return String(cellValue) === String(f.values[0])
     })
@@ -77,12 +92,17 @@ export const useChartPreview = (props: ChartPreviewProps): ChartPreviewView => {
     let plotData: unknown[]
     let title = style.title ?? ''
     let periodDropdown: PeriodDropdownView | null = null
+    const traceName =
+      style.legendName !== undefined && style.legendName.trim() !== ''
+        ? style.legendName
+        : labelOf(config.measureColumn)
 
     if (config.type === 'bar') {
       const agg = aggregateForBar(filteredRows, config.measureColumn, config.groupColumn)
       plotData = [
         {
           type: 'bar',
+          name: traceName,
           x: agg.map((p) => p[0]),
           y: agg.map((p) => p[1]),
           marker: { color },
@@ -97,6 +117,7 @@ export const useChartPreview = (props: ChartPreviewProps): ChartPreviewView => {
       plotData = [
         {
           type: 'pie',
+          name: traceName,
           labels: grouped.map((p) => p[0]),
           values: grouped.map((p) => p[1]),
         },
@@ -116,6 +137,7 @@ export const useChartPreview = (props: ChartPreviewProps): ChartPreviewView => {
         {
           type: 'scatter',
           mode: 'lines+markers',
+          name: traceName,
           x: agg.map((p) => p[0]),
           y: agg.map((p) => p[1]),
           line: { color },

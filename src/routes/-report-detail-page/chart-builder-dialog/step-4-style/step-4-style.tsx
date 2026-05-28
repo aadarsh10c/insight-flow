@@ -22,6 +22,22 @@ export const Step4Style = (props: Step4StyleProps) => {
         />
       </div>
 
+      {view.showLegendName && (
+        <div className="space-y-1.5">
+          <Label className="text-xs" htmlFor="legend-name">
+            Legend name
+          </Label>
+          <Input
+            id="legend-name"
+            value={view.legendName}
+            placeholder={view.legendNamePlaceholder}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              view.handleLegendNameChange(e.target.value)
+            }
+          />
+        </div>
+      )}
+
       <div className="space-y-2">
         <Label className="text-xs">Color</Label>
         {view.swatchGroups.map((group) => (

@@ -83,7 +83,7 @@ export const reducer = (state: StepperState, action: ReducerAction): StepperStat
             : { status: 'active', value: [] },
           4: step4HadValue
             ? { status: 'reset', value: {} }
-            : { status: 'locked', value: {} },
+            : { status: 'active', value: {} },
         },
       }
       return { ...next, canSave: computeCanSave(next) }

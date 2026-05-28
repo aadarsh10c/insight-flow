@@ -11,7 +11,7 @@ export const ReportsPage = (props: ReportsPageProps) => {
     <div className="px-8 py-8">
       <div className="mb-6 flex items-end justify-between">
         <div>
-          <h1 className="font-serif text-2xl font-semibold">Reports</h1>
+          <h1 className="text-title">Reports</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {view.totalCount} report{view.totalCount === 1 ? '' : 's'}
           </p>

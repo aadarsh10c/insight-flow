@@ -10,10 +10,14 @@ const SWATCHES: ReadonlyArray<SwatchGroup> = [
 const DEFAULT_COLOR = '#c2410c'
 
 export const useStep4Style = (props: Step4StyleProps): Step4View => {
-  const { value, defaultTitle, onChange } = props
+  const { value, chartType, defaultTitle, defaultLegendName, onChange } = props
 
   const handleTitleChange = useCallback(
     (title: string) => onChange({ ...value, title }),
+    [value, onChange]
+  )
+  const handleLegendNameChange = useCallback(
+    (legendName: string) => onChange({ ...value, legendName }),
     [value, onChange]
   )
   const handleColorChange = useCallback(
@@ -27,10 +31,14 @@ export const useStep4Style = (props: Step4StyleProps): Step4View => {
 
   return {
     title: value.title ?? defaultTitle,
+    legendName: value.legendName ?? '',
+    legendNamePlaceholder: defaultLegendName,
+    showLegendName: chartType === 'line',
     color: value.color ?? DEFAULT_COLOR,
     legend: value.legend ?? true,
     swatchGroups: SWATCHES,
     handleTitleChange,
+    handleLegendNameChange,
     handleColorChange,
     handleLegendToggle,
   }

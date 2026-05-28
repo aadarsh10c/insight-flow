@@ -22,6 +22,16 @@ export const useStep3Filter = (props: Step3FilterProps): Step3View => {
     [columnConfig]
   )
 
+  const availableColumnsFor = useCallback(
+    (filterId: string) => {
+      const takenByOthers = new Set(
+        value.filter((f) => f.id !== filterId && f.column !== '').map((f) => f.column)
+      )
+      return filterableColumns.filter((c) => !takenByOthers.has(c.name))
+    },
+    [filterableColumns, value]
+  )
+
   const handleAdd = useCallback(() => {
     onChange([
       ...value,
@@ -43,7 +53,7 @@ export const useStep3Filter = (props: Step3FilterProps): Step3View => {
 
   return {
     filters: value,
-    filterableColumns,
+    availableColumnsFor,
     rows,
     labelFor,
     handleAdd,

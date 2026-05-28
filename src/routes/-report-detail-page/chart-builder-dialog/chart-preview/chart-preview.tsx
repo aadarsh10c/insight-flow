@@ -1,5 +1,22 @@
-import Plot from 'react-plotly.js'
+import type { ComponentType } from 'react'
+import * as PlotMod from 'react-plotly.js'
 import { BarChart3 } from 'lucide-react'
+
+const unwrap = (m: unknown): unknown => {
+  let cur = m
+  for (let i = 0; i < 5; i += 1) {
+    if (typeof cur === 'function') return cur
+    if (cur && typeof cur === 'object' && 'default' in (cur as Record<string, unknown>)) {
+      cur = (cur as { default: unknown }).default
+    } else {
+      return cur
+    }
+  }
+  return cur
+}
+
+const Plot = unwrap(PlotMod) as ComponentType<Record<string, unknown>>
+
 import {
   Select,
   SelectContent,

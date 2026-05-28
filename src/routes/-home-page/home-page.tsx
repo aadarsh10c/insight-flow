@@ -29,7 +29,7 @@ export const HomePage = (props: HomePageProps) => {
           <div className="grid h-8 w-8 place-items-center rounded-md bg-accent font-bold text-accent-foreground">
             i
           </div>
-          <span className="font-serif text-lg font-semibold">InsightFlow</span>
+          <span className="text-title">InsightFlow</span>
         </div>
         <a
           href="/styleguide"

@@ -19,7 +19,7 @@ export const DataSourceTable = (props: DataSourceTableProps) => {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center text-muted-foreground">
         <Database className="mb-4 h-12 w-12 text-accent opacity-40" aria-hidden />
-        <p className="font-serif text-lg font-semibold text-foreground">No data sources yet</p>
+        <p className="text-title text-foreground">No data sources yet</p>
         <p className="mt-1 text-sm">Click "+ Add data source" to upload a CSV or Excel file.</p>
       </div>
     )

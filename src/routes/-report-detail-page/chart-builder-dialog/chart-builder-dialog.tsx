@@ -24,7 +24,7 @@ export const ChartBuilderDialog = (props: ChartBuilderDialogProps) => {
     <Dialog open={props.open} onOpenChange={(o) => !o && view.handleClose()}>
       <DialogContent className="h-[90vh] !max-h-[90vh] w-[90vw] !max-w-[90vw] p-0">
         <DialogHeader className="flex flex-row items-center justify-between gap-2">
-          <DialogTitle className="font-serif text-xl">Create Chart</DialogTitle>
+          <DialogTitle className="text-title">Create Chart</DialogTitle>
           <div className="flex gap-2">
             <Button variant="ghost" size="sm" onClick={view.handleResetAll}>
               <RotateCcw className="mr-1.5 h-3.5 w-3.5" aria-hidden />
@@ -106,7 +106,9 @@ export const ChartBuilderDialog = (props: ChartBuilderDialogProps) => {
               >
                 <Step4Style
                   value={state.steps[4].value}
+                  chartType={state.steps[1].value}
                   defaultTitle={view.defaultTitle}
+                  defaultLegendName={view.defaultLegendName}
                   onChange={view.handleStyleChange}
                 />
               </StepCard>

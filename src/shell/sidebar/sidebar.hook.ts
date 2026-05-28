@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useThemeStore } from '@/stores/theme.store'
+import { useUiStore } from '@/stores/ui.store'
 import type { ThemeMode } from '@/types/theme.type'
 import type { SidebarNavItem, SidebarView, UseSidebarParams } from './sidebar.type'
 
@@ -11,14 +12,7 @@ const NAV_ITEMS: ReadonlyArray<SidebarNavItem> = [
   { to: '/settings', label: 'Settings', icon: 'settings', disabled: true, disabledHint: 'Coming soon' },
 ]
 
-const NEXT_MODE: Record<ThemeMode, ThemeMode> = {
-  system: 'light',
-  light: 'dark',
-  dark: 'system',
-}
-
 const THEME_LABELS: Record<ThemeMode, string> = {
-  system: 'System',
   light: 'Light',
   dark: 'Dark',
 }
@@ -26,15 +20,19 @@ const THEME_LABELS: Record<ThemeMode, string> = {
 export const useSidebar = (_params?: UseSidebarParams): SidebarView => {
   const themeMode = useThemeStore((s) => s.mode)
   const setMode = useThemeStore((s) => s.setMode)
+  const isCollapsed = useUiStore((s) => s.sidebarCollapsed)
+  const toggleSidebar = useUiStore((s) => s.toggleSidebar)
 
-  const handleCycleTheme = useCallback(() => {
-    setMode(NEXT_MODE[themeMode])
+  const handleToggleTheme = useCallback(() => {
+    setMode(themeMode === 'light' ? 'dark' : 'light')
   }, [themeMode, setMode])
 
   return {
     navItems: NAV_ITEMS,
     themeMode,
     themeLabel: THEME_LABELS[themeMode],
-    handleCycleTheme,
+    isCollapsed,
+    handleToggleTheme,
+    handleToggleCollapse: toggleSidebar,
   }
 }

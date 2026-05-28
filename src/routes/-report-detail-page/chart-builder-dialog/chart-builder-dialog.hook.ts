@@ -191,11 +191,18 @@ export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
     return `${labelFor(c.measureColumn)} over ${labelFor(c.dateColumn)} (${c.bucket})`
   }, [state.steps, labelFor])
 
+  const defaultLegendName = useMemo(() => {
+    const c = state.steps[2].value
+    if (c === null) return 'Value'
+    return labelFor(c.measureColumn)
+  }, [state.steps, labelFor])
+
   return {
     state,
     partitioned,
     hasPieEligibleColumn,
     defaultTitle: buildDefaultTitle(state.steps[2].value, labelFor),
+    defaultLegendName,
     previewChart,
     summaries: { ...summaries, step2: step2Summary ?? summaries.step2 },
     labelFor,

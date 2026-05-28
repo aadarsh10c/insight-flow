@@ -28,7 +28,7 @@ const StatusDot = ({ status }: StatusDotProps) => {
 
 export const StepCard = (props: StepCardProps) => {
   const { status, stepNumber, title, optional, summary, resetReason, onExpand, children } = props
-  const isBodyVisible = status === 'active' || status === 'reset'
+  const isBodyVisible = status !== 'locked'
   const isHeaderInteractive = status === 'complete' && onExpand !== undefined
 
   return (

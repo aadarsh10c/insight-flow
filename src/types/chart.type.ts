@@ -2,7 +2,7 @@ export type ChartType = 'bar' | 'pie' | 'line'
 
 export type TimeBucket = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
 
-export type FilterPredicate = 'equals' | 'contains'
+export type FilterPredicate = 'equals' | 'contains' | 'between'
 
 export type FilterClause = {
   id: string
@@ -15,6 +15,7 @@ export type ChartStyle = {
   title?: string
   color?: string
   legend?: boolean
+  legendName?: string
   xAxisLabel?: string
   yAxisLabel?: string
 }

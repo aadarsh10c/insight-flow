@@ -85,8 +85,10 @@ describe('aggregateForBar', () => {
 })
 
 describe('bucketKey', () => {
-  it('returns YYYY-M for monthly', () => {
-    expect(bucketKey(new Date('2024-03-15'), 'monthly')).toBe('2024-3')
+  it('returns zero-padded YYYY-MM for monthly so string sort is chronological', () => {
+    expect(bucketKey(new Date('2024-03-15'), 'monthly')).toBe('2024-03')
+    expect(bucketKey(new Date('2024-10-15'), 'monthly')).toBe('2024-10')
+    expect(['2024-03', '2024-10'].sort()).toEqual(['2024-03', '2024-10'])
   })
   it('returns year for yearly', () => {
     expect(bucketKey(new Date('2024-03-15'), 'yearly')).toBe('2024')

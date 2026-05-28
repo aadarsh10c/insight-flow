@@ -6,13 +6,21 @@ const labelOf = (col: string, cfg: AppliedFilterChipsProps['columnConfig']) =>
   cfg[col]?.label ?? col
 
 const formatValue = (f: FilterClause): string => {
+  if (f.predicate === 'between') {
+    const from = f.values[0] === undefined || f.values[0] === null ? '…' : String(f.values[0])
+    const to = f.values[1] === undefined || f.values[1] === null ? '…' : String(f.values[1])
+    return `${from} → ${to}`
+  }
   const v = f.values[0]
   if (v === undefined || v === null) return ''
   return f.predicate === 'contains' ? `"${String(v)}"` : String(v)
 }
 
-const formatPredicate = (f: FilterClause): string =>
-  f.predicate === 'contains' ? 'contains' : '='
+const formatPredicate = (f: FilterClause): string => {
+  if (f.predicate === 'contains') return 'contains'
+  if (f.predicate === 'between') return 'in'
+  return '='
+}
 
 export const AppliedFilterChips = ({ filters, columnConfig }: AppliedFilterChipsProps) => {
   if (filters.length === 0) return null

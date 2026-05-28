@@ -83,10 +83,10 @@ export const bucketKey = (d: Date, bucket: TimeBucket): string => {
       const week = Math.ceil(
         ((d.getTime() - jan1.getTime()) / 86_400_000 + jan1.getDay() + 1) / 7
       )
-      return `${d.getFullYear()}-W${week}`
+      return `${d.getFullYear()}-W${String(week).padStart(2, '0')}`
     }
     case 'monthly':
-      return `${d.getFullYear()}-${d.getMonth() + 1}`
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
     case 'quarterly':
       return `${d.getFullYear()}-Q${Math.floor(d.getMonth() / 3) + 1}`
     case 'yearly':

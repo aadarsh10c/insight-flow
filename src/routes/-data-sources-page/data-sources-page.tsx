@@ -11,7 +11,7 @@ export const DataSourcesPage = (_props: DataSourcesPageProps) => {
     <div className="px-8 py-8">
       <div className="mb-6 flex items-end justify-between">
         <div>
-          <h1 className="font-serif text-2xl font-semibold">Data Sources</h1>
+          <h1 className="text-title">Data Sources</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {view.totalCount} file{view.totalCount === 1 ? '' : 's'}
             {view.totalCount > 0 && ` · ${view.totalRows.toLocaleString()} rows total`}

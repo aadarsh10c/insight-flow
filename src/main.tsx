@@ -1,8 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import './styles/globals.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <div>InsightFlow scaffold</div>
+    <div className="p-8 text-3xl font-serif">InsightFlow scaffold</div>
   </StrictMode>
 )

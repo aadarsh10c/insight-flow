@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StyleguideRouteImport } from './routes/styleguide'
 import { Route as DatasourcesRouteImport } from './routes/datasources'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReportsIndexRouteImport } from './routes/reports/index'
 import { Route as ReportsReportIdRouteImport } from './routes/reports/$reportId'
 
+const StyleguideRoute = StyleguideRouteImport.update({
+  id: '/styleguide',
+  path: '/styleguide',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DatasourcesRoute = DatasourcesRouteImport.update({
   id: '/datasources',
   path: '/datasources',
@@ -38,12 +44,14 @@ const ReportsReportIdRoute = ReportsReportIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/datasources': typeof DatasourcesRoute
+  '/styleguide': typeof StyleguideRoute
   '/reports/$reportId': typeof ReportsReportIdRoute
   '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/datasources': typeof DatasourcesRoute
+  '/styleguide': typeof StyleguideRoute
   '/reports/$reportId': typeof ReportsReportIdRoute
   '/reports': typeof ReportsIndexRoute
 }
@@ -51,26 +59,46 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/datasources': typeof DatasourcesRoute
+  '/styleguide': typeof StyleguideRoute
   '/reports/$reportId': typeof ReportsReportIdRoute
   '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/datasources' | '/reports/$reportId' | '/reports/'
+  fullPaths:
+    | '/'
+    | '/datasources'
+    | '/styleguide'
+    | '/reports/$reportId'
+    | '/reports/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/datasources' | '/reports/$reportId' | '/reports'
-  id: '__root__' | '/' | '/datasources' | '/reports/$reportId' | '/reports/'
+  to: '/' | '/datasources' | '/styleguide' | '/reports/$reportId' | '/reports'
+  id:
+    | '__root__'
+    | '/'
+    | '/datasources'
+    | '/styleguide'
+    | '/reports/$reportId'
+    | '/reports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DatasourcesRoute: typeof DatasourcesRoute
+  StyleguideRoute: typeof StyleguideRoute
   ReportsReportIdRoute: typeof ReportsReportIdRoute
   ReportsIndexRoute: typeof ReportsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/styleguide': {
+      id: '/styleguide'
+      path: '/styleguide'
+      fullPath: '/styleguide'
+      preLoaderRoute: typeof StyleguideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/datasources': {
       id: '/datasources'
       path: '/datasources'
@@ -105,6 +133,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DatasourcesRoute: DatasourcesRoute,
+  StyleguideRoute: StyleguideRoute,
   ReportsReportIdRoute: ReportsReportIdRoute,
   ReportsIndexRoute: ReportsIndexRoute,
 }

@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { HomePage } from './-home-page'
 
-const IndexComponent = () => (
-  <div className="p-8 text-3xl font-serif">Home placeholder</div>
-)
+const IndexRouteComponent = () => <HomePage />
 
-export const Route = createFileRoute('/')({ component: IndexComponent })
+export const Route = createFileRoute('/')({ component: IndexRouteComponent })

@@ -1,6 +1,6 @@
 import type { ThemeMode } from '@/types/theme.type'
 
-export type SidebarIconKey = 'home' | 'database' | 'file-text' | 'palette' | 'settings'
+export type SidebarIconKey = 'home' | 'database' | 'file-text' | 'palette'
 
 export type SidebarNavItem = {
   to: string

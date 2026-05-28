@@ -7,7 +7,6 @@ import {
   Palette,
   PanelLeftClose,
   PanelLeftOpen,
-  Settings,
   Sun,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -22,7 +21,6 @@ const ICONS: Record<SidebarIconKey, LucideIcon> = {
   database: Database,
   'file-text': FileText,
   palette: Palette,
-  settings: Settings,
 }
 
 const THEME_ICONS: Record<ThemeMode, LucideIcon> = {

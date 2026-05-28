@@ -17,7 +17,9 @@
       "Bash(git rm *)",
       "Bash(npm test *)",
       "Bash(npx shadcn@latest add button input textarea label dialog dropdown-menu select table tooltip badge --yes)",
-      "Bash(git tag *)"
+      "Bash(git tag *)",
+      "Bash(npm audit *)",
+      "Bash(node -e \"console.log\\(require\\('xlsx'\\).version\\)\")"
     ]
   }
 }

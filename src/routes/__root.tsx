@@ -1,5 +1,10 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Outlet, useLocation } from '@tanstack/react-router'
+import { Shell } from '@/shell'
 
-const RootComponent = () => <Outlet />
+const RootComponent = () => {
+  const location = useLocation()
+  const isHome = location.pathname === '/'
+  return isHome ? <Outlet /> : <Shell><Outlet /></Shell>
+}
 
 export const Route = createRootRoute({ component: RootComponent })

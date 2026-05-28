@@ -262,13 +262,66 @@ A `src/lib/plotly-theme.ts` module (to be created during implementation) maps th
 
 ## 13. Component-level styling rules
 
-For every shadcn component we use, apply these defaults (overrides go in our wrapper component, not at call sites):
+For every shadcn component we use, apply these defaults (overrides go in our wrapper component, not at call sites).
+
+### 13a. Button — full anatomy
+
+The **Button** is the single most-used interactive primitive. It must look unambiguously like a button, in light and dark, in every state.
+
+**Required visual signals (in all variants except `link`):**
+1. A clear surface (background fill, border, or both)
+2. Adequate contrast against the page
+3. A **transition** (150ms ease-out) on every color/transform change
+4. An **active scale** of `0.98` so a click feels physical
+5. A **focus-visible ring** for keyboard users (per §10)
+
+**Variants:**
+
+| Variant | Light state | Dark state | Use |
+|---|---|---|---|
+| `default` (primary) | `bg-accent` (#c2410c) · white text · `shadow-sm` | `bg-accent` (#ea580c) · white text · `shadow-sm` | Primary CTA — one per screen region |
+| `destructive` | `bg-destructive` (#b91c1c) · white text · `shadow-sm` | `bg-destructive` (#ef4444) · white text · `shadow-sm` | Delete, irreversible actions |
+| `outline` | `bg-surface` · `border-border` · `text-foreground` · `shadow-sm` | `bg-surface` (#292524) · `border-border` (#44403c) · light text | Secondary action beside a primary; Cancel buttons |
+| `secondary` | `bg-muted` (#f5f5f4) · `text-foreground` · `shadow-sm` | `bg-muted` (#363130) · `text-foreground` · `shadow-sm` | Tertiary fills — rare |
+| `ghost` | transparent · hover `bg-muted` | transparent · hover `bg-muted` (#363130) | Icon-only buttons, row actions, toolbar buttons |
+| `link` | `text-accent` · underline on hover | `text-accent` (#ea580c) · underline on hover | Inline links inside text contexts |
+
+**States (apply to every variant except `link`):**
+
+| State | Visual change |
+|---|---|
+| Default | Rest state |
+| Hover | Background opacity 90% (filled) / `bg-muted` (ghost) / underline (link). Cursor: pointer. |
+| Active (pressed) | Scale to 0.98 + background opacity 95% (subtle "pressed" feedback). |
+| Focus-visible | 2px ring in `--ring` color + 2px offset against `--background` (keyboard only, never on click). |
+| Disabled | `opacity-50` + `pointer-events-none` + scale stays at 1 on click. |
+
+**Sizes:**
+
+| Size | Height | Padding | Text | Use |
+|---|---|---|---|---|
+| `sm` | 36px (h-9) | px-3 | 14px | Compact toolbars, inline actions |
+| `default` | 40px (h-10) | px-4 | 14px | Most buttons |
+| `lg` | 44px (h-11) | px-6 | 16px | Hero CTAs, primary screen actions |
+| `icon` | 40×40px | (square) | — | Icon-only (use with `aria-label`) |
+
+**Don't:**
+- ❌ Use `bg-accent` with `bg-accent/0` (transparent) — looks like a text link, not a button
+- ❌ Use `text-accent` without `bg-*` or `border-*` for anything that should look clickable as a button (use `ghost` variant instead — it has hover surface)
+- ❌ Override `transition-all` to remove the responsive feel
+- ❌ Use `link` variant for primary actions — only for inline-text links
+- ❌ Mix size and variant in one button via inline classes — use the variant API or wrap in a feature component
+
+**Do:**
+- ✅ Always pair `bg-*` with `text-*-foreground` (avoid hardcoded text colors)
+- ✅ Use `ghost` for table-row actions like "Create Report" or "Delete" — it has a hover surface so it still feels clickable
+- ✅ Add `aria-label` for icon-only buttons
+- ✅ Use `lg` for the Home hero CTA only
+
+### 13b. Other components
 
 | Component | Default classes / behavior |
 |---|---|
-| `Button` (primary) | `bg-accent text-accent-foreground hover:bg-accent/90` · `radius-md` · `duration-fast` |
-| `Button` (secondary) | `bg-surface border border-border text-foreground hover:bg-muted` |
-| `Button` (ghost) | `text-foreground hover:bg-muted` |
 | `Input` | `bg-surface border border-input text-foreground` · `radius-md` · focus ring per §10 |
 | `Card` | `bg-surface border border-border shadow-sm` · `radius-lg` · `p-6` |
 | `Dialog` (full-screen) | `bg-surface-2` · `radius-xl` · `shadow-lg` · backdrop `bg-background/60 backdrop-blur-sm` |

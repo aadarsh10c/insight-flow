@@ -16,13 +16,15 @@ export const useDataSourceTable = (_params?: UseDataSourceTableParams): DataSour
 
   const enrichedItems = useMemo<EnrichedDataSource[]>(
     () =>
-      list.map((d) => ({
-        ...d,
-        formattedSize: formatBytes(d.sizeBytes),
-        formattedUploadedAt: formatRelativeTime(d.uploadedAt),
-        isMostRecent: d.id === mostRecentId,
-        rowCount: d.rows.length,
-      })),
+      [...list]
+        .sort((a, b) => b.uploadedAt - a.uploadedAt)
+        .map((d) => ({
+          ...d,
+          formattedSize: formatBytes(d.sizeBytes),
+          formattedUploadedAt: formatRelativeTime(d.uploadedAt),
+          isMostRecent: d.id === mostRecentId,
+          rowCount: d.rows.length,
+        })),
     [list, mostRecentId]
   )
 

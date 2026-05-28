@@ -18,6 +18,17 @@
   --success: #15803d;
   --warning: #a16207;
   --destructive: #b91c1c;
+  --destructive-foreground: #ffffff;
+
+  /* shadcn aliases — let stock shadcn components Just Work */
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface-2);
+  --popover-foreground: var(--foreground);
 }
 
 /* ============================================
@@ -38,6 +49,17 @@
   --success: #22c55e;
   --warning: #eab308;
   --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* shadcn aliases */
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface-2);
+  --popover-foreground: var(--foreground);
 }
 
 /* ============================================
@@ -58,6 +80,15 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
 
   --radius-sm: 4px;
   --radius-md: 8px;

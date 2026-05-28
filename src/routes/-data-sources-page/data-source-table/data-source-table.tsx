@@ -62,10 +62,9 @@ export const DataSourceTable = (props: DataSourceTableProps) => {
               <TableCell className="text-muted-foreground">{item.formattedUploadedAt}</TableCell>
               <TableCell className="text-right">
                 <Button
-                  variant="ghost"
+                  variant="soft"
                   size="sm"
                   onClick={() => view.handleCreateReport(item.id)}
-                  className="text-accent hover:bg-accent/10 hover:text-accent"
                 >
                   <FilePlus className="mr-1.5 h-3.5 w-3.5" aria-hidden />
                   Create Report

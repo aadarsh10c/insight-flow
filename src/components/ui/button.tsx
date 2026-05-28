@@ -10,14 +10,18 @@ const buttonVariants = cva(
     'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium',
     // Icon defaults
     '[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    // Cursor — explicit, since Tailwind preflight resets button cursor
+    'cursor-pointer',
+    // Mobile — clear the blue tap-highlight flash
+    '[-webkit-tap-highlight-color:transparent]',
     // Focus ring — keyboard only
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-    // Transitions — responsive feel
+    // Transitions — responsive feel (color/transform changes in 150ms)
     'transition-all duration-150 ease-out',
     // Active state — subtle press
     'active:scale-[0.98]',
     // Disabled
-    'disabled:pointer-events-none disabled:opacity-50 disabled:active:scale-100',
+    'disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100',
   ],
   {
     variants: {
@@ -33,6 +37,8 @@ const buttonVariants = cva(
         // Secondary — muted fill
         secondary:
           'bg-muted text-foreground shadow-sm hover:bg-muted/70 active:bg-muted/60',
+        // Soft — brand-tinted, medium prominence (between filled primary and outline)
+        soft: 'bg-accent/10 text-accent border border-accent/20 hover:bg-accent/15 hover:border-accent/30 active:bg-accent/20',
         // Ghost — no background until hover
         ghost: 'text-foreground hover:bg-muted active:bg-muted/70',
         // Link — looks like a link

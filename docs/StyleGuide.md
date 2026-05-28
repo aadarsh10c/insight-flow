@@ -275,15 +275,16 @@ The **Button** is the single most-used interactive primitive. It must look unamb
 4. An **active scale** of `0.98` so a click feels physical
 5. A **focus-visible ring** for keyboard users (per §10)
 
-**Variants:**
+**Variants (ordered by prominence):**
 
 | Variant | Light state | Dark state | Use |
 |---|---|---|---|
 | `default` (primary) | `bg-accent` (#c2410c) · white text · `shadow-sm` | `bg-accent` (#ea580c) · white text · `shadow-sm` | Primary CTA — one per screen region |
 | `destructive` | `bg-destructive` (#b91c1c) · white text · `shadow-sm` | `bg-destructive` (#ef4444) · white text · `shadow-sm` | Delete, irreversible actions |
+| `soft` | `bg-accent/10` · `text-accent` · `border-accent/20` | Same tokens (auto-adapts) | **Medium prominence** — row "Create Report", "+ Add filter", contextual CTAs. Brand-aware but less dominant than primary. |
 | `outline` | `bg-surface` · `border-border` · `text-foreground` · `shadow-sm` | `bg-surface` (#292524) · `border-border` (#44403c) · light text | Secondary action beside a primary; Cancel buttons |
 | `secondary` | `bg-muted` (#f5f5f4) · `text-foreground` · `shadow-sm` | `bg-muted` (#363130) · `text-foreground` · `shadow-sm` | Tertiary fills — rare |
-| `ghost` | transparent · hover `bg-muted` | transparent · hover `bg-muted` (#363130) | Icon-only buttons, row actions, toolbar buttons |
+| `ghost` | transparent · hover `bg-muted` | transparent · hover `bg-muted` (#363130) | Icon-only buttons, toolbar buttons, low-prominence actions |
 | `link` | `text-accent` · underline on hover | `text-accent` (#ea580c) · underline on hover | Inline links inside text contexts |
 
 **States (apply to every variant except `link`):**
@@ -314,9 +315,32 @@ The **Button** is the single most-used interactive primitive. It must look unamb
 
 **Do:**
 - ✅ Always pair `bg-*` with `text-*-foreground` (avoid hardcoded text colors)
-- ✅ Use `ghost` for table-row actions like "Create Report" or "Delete" — it has a hover surface so it still feels clickable
+- ✅ Use `soft` for table-row contextual actions like "Create Report" — brand-aware, clearly a button
+- ✅ Use `ghost` for icon-only or destructive low-prominence actions (Delete icon button in row)
 - ✅ Add `aria-label` for icon-only buttons
 - ✅ Use `lg` for the Home hero CTA only
+
+### Best-practices for "responsive feel" (already baked into our `Button`)
+
+Six visual feedbacks combine to make a button feel physical, not flat:
+
+1. **Cursor changes** to `pointer` on hover (Tailwind preflight resets button cursor to default — we add `cursor-pointer` explicitly)
+2. **Background shifts** on hover (filled variants: 90% opacity · ghost: muted appears · soft: tint deepens)
+3. **Background shifts again** on active/press (95% opacity for filled · 70% for ghost)
+4. **Scale to 0.98** on `active:` — subtle "pressed" feedback, 2% smaller for ~50ms
+5. **Focus ring** on `:focus-visible` (keyboard only, never on mouse click — uses `--ring` token)
+6. **All transitions** are `transition-all duration-150 ease-out` — fast enough to feel snappy (sub-200ms), smooth enough to read
+
+Industry conventions we follow:
+- **Duration:** 100-200ms is the sweet spot. <100ms feels jumpy; >200ms feels sluggish.
+- **Easing:** `ease-out` (deceleration) for hover/active — the button "settles" into its new state. Linear is robotic; ease-in feels late.
+- **Active scale:** 0.97-0.99 (we use 0.98). Bigger scales (0.95) feel cartoonish; <0.99 is imperceptible.
+- **Focus ring:** offset from the button by 2px so it's visible against any background. Use brand color at 30-50% opacity.
+- **Disabled:** 40-60% opacity (we use 50%) + `cursor-not-allowed` + `pointer-events-none` (prevents both click and hover state).
+- **Mobile:** `-webkit-tap-highlight-color: transparent` to suppress the blue flash on tap (our scale + bg shift is enough feedback).
+- **Reduced motion:** respect `prefers-reduced-motion` — our global rule in `globals.css` cancels all `transition` and `animation` for that user. Buttons still change color but don't scale.
+
+Loading state (when async): not in V1 default, but the pattern when needed is — disable the button, swap label to "Loading…" or add a spinner, keep width constant to prevent layout shift.
 
 ### 13b. Other components
 

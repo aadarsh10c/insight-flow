@@ -164,61 +164,192 @@ export const SectionSpacing = () => (
 )
 
 // 6. Radius
-const RADII = [
-  { name: 'sm', px: 4 },
-  { name: 'md', px: 8 },
-  { name: 'lg', px: 10 },
-  { name: 'xl', px: 12 },
-  { name: 'full', px: 9999 },
+type RadiusRow = { name: string; px: number; usage: string; components: string }
+const RADII: ReadonlyArray<RadiusRow> = [
+  {
+    name: 'sm',
+    px: 4,
+    usage: 'Small inline accents',
+    components: 'Filter chips · TypeBadge · spacing markers',
+  },
+  {
+    name: 'md',
+    px: 8,
+    usage: 'Default surface — most interactive elements',
+    components: 'Button · Input · Popover · Select · Skeleton · StepCard',
+  },
+  {
+    name: 'lg',
+    px: 10,
+    usage: 'Card-sized containers',
+    components: 'Tables · ChartPreview frame · empty-state boxes · Toast',
+  },
+  {
+    name: 'xl',
+    px: 12,
+    usage: 'Large emphasized surfaces',
+    components: 'Dialog modals · home hero cards',
+  },
+  {
+    name: 'full',
+    px: 9999,
+    usage: 'Pills, status dots',
+    components: 'Status circles in StepCard · most-recent green tick',
+  },
 ]
 
 export const SectionRadius = () => (
-  <Section id="radius" title="6. Radius" description="Five values. Most surfaces use md or lg.">
-    <div className="flex flex-wrap gap-3">
-      {RADII.map(({ name, px }) => (
-        <div
-          key={name}
-          className="grid h-16 w-20 place-items-center border border-border bg-surface"
-          style={{ borderRadius: px === 9999 ? '9999px' : px }}
-        >
-          <code className="text-caption text-muted-foreground">rounded-{name}</code>
-        </div>
-      ))}
+  <Section
+    id="radius"
+    title="6. Radius"
+    description="Five values. Pick by the container size, not by visual feel."
+  >
+    <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
+      <table className="w-full text-body">
+        <thead className="bg-muted/50">
+          <tr className="text-left">
+            <th className="px-3 py-2 text-caption text-muted-foreground">Token</th>
+            <th className="px-3 py-2 text-caption text-muted-foreground">Size</th>
+            <th className="px-3 py-2 text-caption text-muted-foreground">Used for</th>
+            <th className="px-3 py-2 text-caption text-muted-foreground">Components</th>
+            <th className="px-3 py-2 text-caption text-muted-foreground">Sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          {RADII.map(({ name, px, usage, components }) => (
+            <tr key={name} className="border-t border-border align-middle">
+              <td className="px-3 py-2 font-mono text-small font-semibold">rounded-{name}</td>
+              <td className="px-3 py-2 font-mono text-small">{px === 9999 ? '∞' : `${px}px`}</td>
+              <td className="px-3 py-2 text-small text-muted-foreground">{usage}</td>
+              <td className="px-3 py-2 text-small text-muted-foreground">{components}</td>
+              <td className="px-3 py-2">
+                <div
+                  className="h-8 w-12 border border-border bg-muted"
+                  style={{ borderRadius: px === 9999 ? '9999px' : px }}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   </Section>
 )
 
 // 7. Elevation
+type ElevationRow = {
+  level: string
+  surface: string
+  shadow: 'none' | 'shadow-sm' | 'shadow-md' | 'shadow-lg'
+  uses: string
+  components: string
+}
+
+const ELEVATION: ReadonlyArray<ElevationRow> = [
+  {
+    level: 'L1 · Base',
+    surface: 'bg-background',
+    shadow: 'none',
+    uses: 'Page background, inputs',
+    components: 'Page chrome · Input · Textarea',
+  },
+  {
+    level: 'L2 · Card',
+    surface: 'bg-surface',
+    shadow: 'shadow-sm',
+    uses: 'Cards, tables, raised panels',
+    components: 'DataSourceTable · ReportTable · home cards · ChartPreview frame',
+  },
+  {
+    level: 'L3 · Popover',
+    surface: 'bg-popover (= surface-2)',
+    shadow: 'shadow-lg',
+    uses: 'Modals, popovers, dropdowns',
+    components: 'Dialog · Popover · Select · DropdownMenu · Calendar wrapper',
+  },
+  {
+    level: 'L4 · Toast',
+    surface: 'bg-foreground / bg-surface',
+    shadow: 'shadow-md',
+    uses: 'Floating notifications, tooltips',
+    components: 'Toast · Tooltip · DropdownMenu submenu',
+  },
+]
+
 export const SectionElevation = () => (
-  <Section id="elevation" title="7. Elevation" description="Four levels. Shadows pair with surface tokens.">
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      <div className="rounded-md border border-border bg-surface p-4">
-        <p className="text-heading">L1 · Base</p>
-        <p className="text-small text-muted-foreground">Page content, inputs</p>
+  <Section
+    id="elevation"
+    title="7. Elevation"
+    description="Four levels. Surface + shadow + border are bundled — never set shadow directly."
+  >
+    <div className="overflow-hidden rounded-md border border-border bg-surface shadow-sm">
+      <table className="w-full text-body">
+        <thead className="bg-muted/50">
+          <tr className="text-left">
+            <th className="px-3 py-2 text-caption text-muted-foreground">Level</th>
+            <th className="px-3 py-2 text-caption text-muted-foreground">Surface</th>
+            <th className="px-3 py-2 text-caption text-muted-foreground">Shadow</th>
+            <th className="px-3 py-2 text-caption text-muted-foreground">Used for</th>
+            <th className="px-3 py-2 text-caption text-muted-foreground">Components</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ELEVATION.map((row) => (
+            <tr key={row.level} className="border-t border-border align-top">
+              <td className="px-3 py-2 font-semibold">{row.level}</td>
+              <td className="px-3 py-2 font-mono text-small">{row.surface}</td>
+              <td className="px-3 py-2 font-mono text-small">{row.shadow}</td>
+              <td className="px-3 py-2 text-small text-muted-foreground">{row.uses}</td>
+              <td className="px-3 py-2 text-small text-muted-foreground">{row.components}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="rounded-md border border-border bg-background p-4">
+        <p className="text-heading">L1</p>
+        <code className="text-caption text-muted-foreground">no shadow</code>
       </div>
       <div className="rounded-md border border-border bg-surface p-4 shadow-sm">
-        <p className="text-heading">L2 · Card</p>
-        <p className="text-small text-muted-foreground">Surface cards, tables</p>
+        <p className="text-heading">L2</p>
+        <code className="text-caption text-muted-foreground">shadow-sm</code>
       </div>
-      <div className="rounded-md border border-border bg-popover p-4 shadow-md">
-        <p className="text-heading">L3 · Popover</p>
-        <p className="text-small text-muted-foreground">Menus, comboboxes</p>
+      <div className="rounded-md border border-border bg-popover p-4 shadow-lg">
+        <p className="text-heading">L3</p>
+        <code className="text-caption text-muted-foreground">shadow-lg</code>
       </div>
-      <div className="rounded-md bg-foreground p-4 text-background shadow-lg">
-        <p className="text-heading">L4 · Toast</p>
-        <p className="text-small opacity-80">Notifications</p>
+      <div className="rounded-md bg-foreground p-4 text-background shadow-md">
+        <p className="text-heading">L4</p>
+        <code className="text-caption opacity-80">shadow-md</code>
       </div>
     </div>
   </Section>
 )
 
 // 8. Shadows
+type ShadowRow = { cls: 'shadow-sm' | 'shadow-md' | 'shadow-lg'; level: string; usage: string }
+const SHADOWS: ReadonlyArray<ShadowRow> = [
+  { cls: 'shadow-sm', level: 'L2', usage: 'Cards, tables, default buttons' },
+  { cls: 'shadow-md', level: 'L4', usage: 'Toasts, tooltips, hover lift' },
+  { cls: 'shadow-lg', level: 'L3', usage: 'Modals, popovers, dropdowns, select content' },
+]
+
 export const SectionShadows = () => (
-  <Section id="shadows" title="8. Shadows" description="Three weights. Match elevation, don't free-style.">
+  <Section
+    id="shadows"
+    title="8. Shadows"
+    description="Three classes. Pick by the elevation level you're rendering, not by visual feel."
+  >
     <div className="grid gap-4 sm:grid-cols-3">
-      {(['shadow-sm', 'shadow-md', 'shadow-lg'] as const).map((cls) => (
-        <div key={cls} className={`rounded-md border border-border bg-surface p-4 ${cls}`}>
-          <code className="text-caption text-muted-foreground">{cls}</code>
+      {SHADOWS.map(({ cls, level, usage }) => (
+        <div key={cls} className={`space-y-2 rounded-md border border-border bg-surface p-4 ${cls}`}>
+          <div className="flex items-baseline justify-between">
+            <code className="text-caption text-muted-foreground">{cls}</code>
+            <span className="text-caption text-accent">{level}</span>
+          </div>
+          <p className="text-small text-muted-foreground">{usage}</p>
         </div>
       ))}
     </div>

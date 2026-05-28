@@ -26,7 +26,7 @@ export const DataSourceTable = (props: DataSourceTableProps) => {
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-surface">
+    <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
       <Table>
         <TableHeader>
           <TableRow>

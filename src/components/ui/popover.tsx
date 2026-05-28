@@ -25,7 +25,7 @@ export const PopoverContent = React.forwardRef<
           onWheel?.(e)
         }}
         className={cn(
-          'z-50 w-72 max-h-[var(--radix-popover-content-available-height)] overflow-auto rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md outline-none',
+          'z-50 w-72 max-h-[var(--radix-popover-content-available-height)] overflow-auto rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-lg outline-none',
           'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
           className
         )}

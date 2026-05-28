@@ -11,7 +11,7 @@ export const ToastHost = () => {
           key={t.id}
           role="status"
           className={cn(
-            'pointer-events-auto flex w-80 items-start gap-3 rounded-lg border bg-surface px-4 py-3 shadow-lg',
+            'pointer-events-auto flex w-80 items-start gap-3 rounded-lg border bg-surface px-4 py-3 shadow-md',
             t.variant === 'destructive' && 'border-destructive/50',
             t.variant === 'success' && 'border-success/50',
             t.variant === 'default' && 'border-border'

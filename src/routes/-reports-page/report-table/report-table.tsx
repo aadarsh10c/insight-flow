@@ -48,7 +48,7 @@ export const ReportTable = (_props: ReportTableProps) => {
         </span>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-border bg-surface">
+      <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
         <Table>
           <TableHeader>
             <TableRow>

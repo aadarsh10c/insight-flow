@@ -12,7 +12,9 @@
       "Bash(npm init *)",
       "Bash(git config *)",
       "Bash(npm install *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(rm -f src/main.js vite.config.js vite.config.d.ts tsconfig.tsbuildinfo tsconfig.node.tsbuildinfo)",
+      "Bash(git rm *)"
     ]
   }
 }

@@ -8,6 +8,14 @@ describe('inferColumnType', () => {
     )
   })
 
+  it('returns "date" for US-style slash dates with unpadded day/month (11/8/2016)', () => {
+    expect(inferColumnType(['11/8/2016', '11/11/2016', '6/3/2017', '12/30/2017'])).toBe('date')
+  })
+
+  it('returns "date" for ISO with unpadded month/day (2024-1-1)', () => {
+    expect(inferColumnType(['2024-1-1', '2024-2-15', '2024-12-3', '2025-3-30'])).toBe('date')
+  })
+
   it('returns "date" for year-only values', () => {
     expect(inferColumnType(['2020', '2021', '2022', '2023', '2024'])).toBe('date')
   })

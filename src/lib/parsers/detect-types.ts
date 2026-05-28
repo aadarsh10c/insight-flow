@@ -1,9 +1,10 @@
 import type { ColumnSchema, ColumnType, RowData } from '@/types/data-source.type'
 
 const DATE_PATTERNS: RegExp[] = [
-  /^\d{4}-\d{2}-\d{2}/, // YYYY-MM-DD
-  /^\d{2}\/\d{2}\/\d{4}/, // DD/MM/YYYY or MM/DD/YYYY
-  /^\d{2}-\d{2}-\d{4}/, // MM-DD-YYYY
+  /^\d{4}-\d{1,2}-\d{1,2}/, // YYYY-MM-DD or YYYY-M-D (ISO; allow unpadded)
+  /^\d{1,2}\/\d{1,2}\/\d{4}/, // M/D/YYYY · MM/DD/YYYY · DD/MM/YYYY (allow unpadded)
+  /^\d{1,2}-\d{1,2}-\d{4}/, // M-D-YYYY (allow unpadded)
+  /^\d{4}\/\d{1,2}\/\d{1,2}/, // YYYY/MM/DD (occasionally seen)
   /^\d{4}$/, // Year only
   /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}$/i, // Month-Year
   /^Q[1-4]\s+\d{4}$/i, // Quarter

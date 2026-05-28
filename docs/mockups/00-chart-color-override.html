@@ -1,0 +1,136 @@
+<h2>Chart color override · Step 4 (Style) of Chart Builder</h2>
+<p class="subtitle">User can change the chart color. To stay consistent in both modes, we expose a <strong>curated 12-swatch picker</strong> (not a free hex input). All swatches sit at the 700 shade, all pass AA contrast in light + dark.</p>
+
+<style>
+  .cv { font-family: ui-sans-serif, system-ui, sans-serif; }
+  .cv .panel { background: #fff; border: 1px solid #e7e5e4; border-radius: 12px; padding: 18px; margin-bottom: 20px; }
+  .cv .label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #78716c; margin-bottom: 10px; }
+  .cv .swatch-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+  .cv .swatch { aspect-ratio: 2 / 1; border-radius: 8px; cursor: pointer; position: relative; box-shadow: inset 0 0 0 1px rgba(0,0,0,.05); }
+  .cv .swatch.sel { box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 0 0 3px #fff, 0 0 0 5px #c2410c; }
+  .cv .swatch.sel::after { content: "✓"; color: #fff; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-weight: 600; font-size: 16px; }
+
+  .cv .row-label { font-size: 11px; color: #78716c; margin: 14px 0 6px; }
+  .cv .row-label:first-of-type { margin-top: 0; }
+
+  /* Demos */
+  .demo-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .demo-card { background: #fdfbf7; border: 1px solid #e7e5e4; border-radius: 10px; padding: 14px; }
+  .demo-card .ttl { font-family: 'Iowan Old Style', Georgia, serif; font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .demo-card .sub { font-size: 11px; color: #78716c; margin-bottom: 10px; }
+  .bars { display: flex; gap: 5px; align-items: end; height: 90px; }
+  .bars > div { flex: 1; border-radius: 3px 3px 0 0; }
+
+  .pie-row { display: flex; gap: 4px; height: 90px; align-items: end; }
+  .pie-row > div { flex: 1; border-radius: 3px 3px 0 0; }
+
+  .line-wrap { height: 90px; position: relative; }
+  .line-wrap svg { width: 100%; height: 100%; }
+</style>
+
+<div class="cv">
+
+  <!-- Picker -->
+  <div class="panel">
+    <div class="label">Curated swatch picker · 12 colors</div>
+
+    <div class="row-label">Warm</div>
+    <div class="swatch-row">
+      <div class="swatch sel" style="background:#c2410c" title="orange-700 (default · accent)"></div>
+      <div class="swatch" style="background:#a16207" title="amber-700"></div>
+      <div class="swatch" style="background:#b91c1c" title="red-700"></div>
+      <div class="swatch" style="background:#be185d" title="pink-700"></div>
+    </div>
+
+    <div class="row-label">Cool</div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#0e7490" title="cyan-700"></div>
+      <div class="swatch" style="background:#1d4ed8" title="blue-700"></div>
+      <div class="swatch" style="background:#6d28d9" title="violet-700"></div>
+      <div class="swatch" style="background:#0f766e" title="teal-700"></div>
+    </div>
+
+    <div class="row-label">Neutral / earthy</div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:#15803d" title="green-700"></div>
+      <div class="swatch" style="background:#4d7c0f" title="lime-700"></div>
+      <div class="swatch" style="background:#44403c" title="stone-700"></div>
+      <div class="swatch" style="background:#334155" title="slate-700"></div>
+    </div>
+
+    <div style="font-size: 11px; color: #78716c; margin-top: 14px; padding-top: 12px; border-top: 1px solid #f0ede9;">
+      Top row marked <span style="color:#c2410c">●</span> = current default (matches the accent token).
+      Hovering any swatch shows its Tailwind name as a tooltip in the live app.
+    </div>
+  </div>
+
+  <!-- Override behavior demos -->
+  <div class="panel">
+    <div class="label">Override behavior by chart type</div>
+
+    <div class="demo-row">
+      <!-- BAR -->
+      <div class="demo-card">
+        <div class="ttl">Bar chart</div>
+        <div class="sub">Picks one color → all bars take it</div>
+        <div class="bars">
+          <div style="background:#c2410c;height:55%"></div>
+          <div style="background:#c2410c;height:80%"></div>
+          <div style="background:#c2410c;height:40%"></div>
+          <div style="background:#c2410c;height:70%"></div>
+          <div style="background:#c2410c;height:90%"></div>
+        </div>
+        <div style="font-size:10px;color:#78716c;margin-top:8px">Showing: orange-700 (default)</div>
+      </div>
+
+      <!-- LINE -->
+      <div class="demo-card">
+        <div class="ttl">Line chart</div>
+        <div class="sub">Picks one color → line + markers</div>
+        <div class="line-wrap">
+          <svg viewBox="0 0 200 90" preserveAspectRatio="none">
+            <polyline points="10,70 50,40 90,55 130,25 170,35 195,15" fill="none" stroke="#0e7490" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="10" cy="70" r="3" fill="#0e7490"/>
+            <circle cx="50" cy="40" r="3" fill="#0e7490"/>
+            <circle cx="90" cy="55" r="3" fill="#0e7490"/>
+            <circle cx="130" cy="25" r="3" fill="#0e7490"/>
+            <circle cx="170" cy="35" r="3" fill="#0e7490"/>
+            <circle cx="195" cy="15" r="3" fill="#0e7490"/>
+          </svg>
+        </div>
+        <div style="font-size:10px;color:#78716c;margin-top:8px">Showing: cyan-700 (user picked)</div>
+      </div>
+
+      <!-- PIE -->
+      <div class="demo-card">
+        <div class="ttl">Pie chart</div>
+        <div class="sub">Picks an <em>anchor</em> → palette rotates from it</div>
+        <div class="pie-row">
+          <div style="background:#6d28d9;height:80%"></div>
+          <div style="background:#1d4ed8;height:60%"></div>
+          <div style="background:#0e7490;height:90%"></div>
+          <div style="background:#0f766e;height:45%"></div>
+          <div style="background:#15803d;height:70%"></div>
+          <div style="background:#4d7c0f;height:55%"></div>
+        </div>
+        <div style="font-size:10px;color:#78716c;margin-top:8px">Showing: violet-700 anchor → cool-leaning palette</div>
+      </div>
+    </div>
+
+    <div style="font-size: 12px; color: #78716c; margin-top: 14px; padding: 10px 12px; background: #fff7ed; border: 1px solid #fdba74; border-radius: 8px;">
+      <strong style="color:#9a3412">Why curated, not free hex?</strong> A free color picker can produce dark-mode contrast failures, which violates the §1 principle "errors prevented, not corrected." All 12 swatches are pre-validated for both modes. Free hex stays available as a V2 enhancement once we add a contrast-check guard.
+    </div>
+  </div>
+
+  <!-- Optional V2 hint -->
+  <div class="panel">
+    <div class="label">Out of scope for V1 (parking lot)</div>
+    <ul style="font-size: 13px; color: #1c1917; line-height: 1.7; margin: 0; padding-left: 20px;">
+      <li>Free hex / HSL color picker (V2 — pair with live contrast guard)</li>
+      <li>Saving a custom palette across charts (V2 — needs persistence layer)</li>
+      <li>Per-bar color override in a bar chart (V2 — needs multi-color editor UI)</li>
+      <li>Color-blind safe mode toggle (V2 — picks alternative palette)</li>
+    </ul>
+  </div>
+
+</div>

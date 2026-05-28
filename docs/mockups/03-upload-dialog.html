@@ -1,0 +1,343 @@
+<h2>Screen 3 of 7 — Upload Data Source dialog</h2>
+<p class="subtitle">Triggered from /datasources → "+ Add data source". Single-column modal: file drop zone + name field + actions. Three states shown (initial, file-selected, error). Light + dark.</p>
+
+<style>
+  .udd { font-family: ui-sans-serif, system-ui, sans-serif; }
+  .panel-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #6b7280; padding: 8px 14px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
+
+  /* Stage = the backdrop + dialog. We don't show the page behind it, just a dim. */
+  .stage { padding: 28px; background: rgba(28,25,23,0.55); backdrop-filter: blur(4px); min-height: 440px; display: grid; place-items: center; border-radius: 0; }
+  .stage-dark { background: rgba(0,0,0,0.75); }
+
+  .dlg { width: 100%; max-width: 460px; background: #fafaf9; border: 1px solid #e7e5e4; border-radius: 12px; box-shadow: 0 10px 30px rgba(28,25,23,0.12), 0 4px 8px rgba(28,25,23,0.06); overflow: hidden; }
+  .dlg-dark { background: #2c2826; border-color: #57534e; box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 12px 32px rgba(0,0,0,0.5); color: #f5f5f4; }
+
+  .dlg-head { padding: 18px 22px 4px; }
+  .dlg-head h2 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; font-weight: 600; margin: 0; }
+  .dlg-head p { font-size: 13px; color: #78716c; margin: 4px 0 0; }
+  .dlg-dark .dlg-head p { color: #a8a29e; }
+
+  .dlg-body { padding: 18px 22px 4px; display: flex; flex-direction: column; gap: 16px; }
+
+  .field-label { font-size: 12px; font-weight: 500; color: #1c1917; }
+  .dlg-dark .field-label { color: #f5f5f4; }
+
+  /* Drop zone */
+  .drop { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 16px; background: #fff; border: 1.5px dashed #d6d3d1; border-radius: 10px; text-align: center; gap: 6px; cursor: pointer; }
+  .dlg-dark .drop { background: #292524; border-color: #57534e; }
+  .drop:hover { border-color: #c2410c; background: #fff7ed; }
+  .dlg-dark .drop:hover { background: rgba(234,88,12,0.05); }
+  .drop-icon { width: 32px; height: 32px; color: #78716c; margin-bottom: 4px; }
+  .dlg-dark .drop-icon { color: #a8a29e; }
+  .drop-title { font-size: 13px; font-weight: 500; color: #1c1917; }
+  .dlg-dark .drop-title { color: #f5f5f4; }
+  .drop-sub { font-size: 11px; color: #78716c; }
+  .dlg-dark .drop-sub { color: #a8a29e; }
+
+  .drop-selected { background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; padding: 22px 18px; display: flex; align-items: center; gap: 14px; min-height: 132px; box-sizing: border-box; }
+  .dlg-dark .drop-selected { background: #292524; border-color: #44403c; }
+  .drop-selected .file-icon { width: 44px; height: 44px; background: #fff7ed; color: #c2410c; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; }
+  .dlg-dark .drop-selected .file-icon { background: rgba(234,88,12,0.15); color: #fb923c; }
+  .drop-selected .file-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .drop-selected .file-name { font-size: 14px; font-weight: 500; color: #1c1917; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dlg-dark .drop-selected .file-name { color: #f5f5f4; }
+  .drop-selected .file-size { font-size: 11px; color: #78716c; }
+  .dlg-dark .drop-selected .file-size { color: #a8a29e; }
+  .drop-selected .file-ready { font-size: 11px; color: #15803d; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
+  .dlg-dark .drop-selected .file-ready { color: #22c55e; }
+  .drop-selected .change-btn { font-size: 12px; color: #c2410c; cursor: pointer; align-self: flex-start; padding: 4px 8px; border-radius: 6px; }
+  .drop-selected .change-btn:hover { background: #fff7ed; }
+  .dlg-dark .drop-selected .change-btn { color: #fb923c; }
+  .dlg-dark .drop-selected .change-btn:hover { background: rgba(234,88,12,0.08); }
+
+  /* Drop zone — error state */
+  .drop.error { border-color: #b91c1c; background: rgba(185,28,28,0.04); }
+  .dlg-dark .drop.error { background: rgba(239,68,68,0.06); border-color: #ef4444; }
+
+  .input { width: 100%; padding: 8px 12px; background: #fff; border: 1px solid #e7e5e4; border-radius: 8px; font-size: 13px; color: #1c1917; font-family: inherit; }
+  .dlg-dark .input { background: #292524; border-color: #44403c; color: #f5f5f4; }
+  .input:focus { outline: none; border-color: #c2410c; box-shadow: 0 0 0 3px rgba(194,65,12,0.15); }
+
+  .error-msg { font-size: 12px; color: #b91c1c; display: flex; align-items: center; gap: 6px; }
+  .dlg-dark .error-msg { color: #ef4444; }
+
+  .dlg-foot { padding: 14px 22px 18px; display: flex; justify-content: flex-end; gap: 8px; }
+  .btn { padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 0; }
+  .btn-primary { background: #c2410c; color: #fff; display: inline-flex; align-items: center; gap: 6px; }
+  .dlg-dark .btn-primary { background: #ea580c; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-outline { background: transparent; color: #1c1917; border: 1px solid #e7e5e4; }
+  .dlg-dark .btn-outline { color: #f5f5f4; border-color: #44403c; }
+
+  .icon-svg { width: 14px; height: 14px; }
+
+  .three-states { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .state-wrap { border: 1px solid #e7e5e4; border-radius: 12px; overflow: hidden; }
+</style>
+
+<div class="udd">
+
+  <!-- LIGHT — 3 states -->
+  <h3 style="font-family:'Iowan Old Style',Georgia,serif;font-size:18px;margin:8px 0 12px;">Light · three states (initial · file selected · error)</h3>
+  <div class="three-states">
+
+    <!-- State 1: Initial -->
+    <div class="state-wrap">
+      <div class="panel-label">A · Initial</div>
+      <div class="stage">
+        <div class="dlg">
+          <div class="dlg-head">
+            <h2>Add data source</h2>
+            <p>Upload a CSV or Excel file. Limit: 10 MB or 50,000 rows.</p>
+          </div>
+          <div class="dlg-body">
+            <div>
+              <label class="field-label">File</label>
+              <div class="drop" style="margin-top:6px">
+                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div class="drop-title">Drop CSV or Excel here</div>
+                <div class="drop-sub">or click to browse</div>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Name</label>
+              <input class="input" placeholder="My data source" style="margin-top:6px" />
+            </div>
+          </div>
+          <div class="dlg-foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary" disabled>
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Add data source
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- State 2: File selected -->
+    <div class="state-wrap">
+      <div class="panel-label">B · File selected</div>
+      <div class="stage">
+        <div class="dlg">
+          <div class="dlg-head">
+            <h2>Add data source</h2>
+            <p>Upload a CSV or Excel file. Limit: 10 MB or 50,000 rows.</p>
+          </div>
+          <div class="dlg-body">
+            <div>
+              <label class="field-label">File</label>
+              <div class="drop-selected" style="margin-top:6px">
+                <div class="file-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="file-meta">
+                  <div class="file-name">orders_2024.csv</div>
+                  <div class="file-size">847 KB · 4,217 rows</div>
+                  <div class="file-ready">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Ready to add
+                  </div>
+                </div>
+                <span class="change-btn">Change</span>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Name</label>
+              <input class="input" value="orders_2024" style="margin-top:6px" />
+            </div>
+          </div>
+          <div class="dlg-foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Add data source
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- State 3: Error -->
+    <div class="state-wrap">
+      <div class="panel-label">C · Error (oversize)</div>
+      <div class="stage">
+        <div class="dlg">
+          <div class="dlg-head">
+            <h2>Add data source</h2>
+            <p>Upload a CSV or Excel file. Limit: 10 MB or 50,000 rows.</p>
+          </div>
+          <div class="dlg-body">
+            <div>
+              <label class="field-label">File</label>
+              <div class="drop error" style="margin-top:6px">
+                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#b91c1c"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="drop-title" style="color:#b91c1c">huge-orders.csv (47 MB)</div>
+                <div class="drop-sub">Drop a smaller file or sample</div>
+              </div>
+              <div class="error-msg" style="margin-top:8px">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                This file is too large for browser processing. Try a sample of up to 50,000 rows.
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Name</label>
+              <input class="input" value="huge-orders" style="margin-top:6px" />
+            </div>
+          </div>
+          <div class="dlg-foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary" disabled>
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Add data source
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DARK — 3 states -->
+  <h3 style="font-family:'Iowan Old Style',Georgia,serif;font-size:18px;margin:8px 0 12px;">Dark · same three states</h3>
+  <div class="three-states">
+
+    <!-- D1 -->
+    <div class="state-wrap">
+      <div class="panel-label">A · Initial</div>
+      <div class="stage stage-dark">
+        <div class="dlg dlg-dark">
+          <div class="dlg-head">
+            <h2>Add data source</h2>
+            <p>Upload a CSV or Excel file. Limit: 10 MB or 50,000 rows.</p>
+          </div>
+          <div class="dlg-body">
+            <div>
+              <label class="field-label">File</label>
+              <div class="drop" style="margin-top:6px">
+                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div class="drop-title">Drop CSV or Excel here</div>
+                <div class="drop-sub">or click to browse</div>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Name</label>
+              <input class="input" placeholder="My data source" style="margin-top:6px" />
+            </div>
+          </div>
+          <div class="dlg-foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary" disabled>
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Add data source
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D2 -->
+    <div class="state-wrap">
+      <div class="panel-label">B · File selected</div>
+      <div class="stage stage-dark">
+        <div class="dlg dlg-dark">
+          <div class="dlg-head">
+            <h2>Add data source</h2>
+            <p>Upload a CSV or Excel file. Limit: 10 MB or 50,000 rows.</p>
+          </div>
+          <div class="dlg-body">
+            <div>
+              <label class="field-label">File</label>
+              <div class="drop-selected" style="margin-top:6px">
+                <div class="file-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="file-meta">
+                  <div class="file-name">orders_2024.csv</div>
+                  <div class="file-size">847 KB · 4,217 rows</div>
+                  <div class="file-ready">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Ready to add
+                  </div>
+                </div>
+                <span class="change-btn">Change</span>
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Name</label>
+              <input class="input" value="orders_2024" style="margin-top:6px" />
+            </div>
+          </div>
+          <div class="dlg-foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Add data source
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D3 -->
+    <div class="state-wrap">
+      <div class="panel-label">C · Error (oversize)</div>
+      <div class="stage stage-dark">
+        <div class="dlg dlg-dark">
+          <div class="dlg-head">
+            <h2>Add data source</h2>
+            <p>Upload a CSV or Excel file. Limit: 10 MB or 50,000 rows.</p>
+          </div>
+          <div class="dlg-body">
+            <div>
+              <label class="field-label">File</label>
+              <div class="drop error" style="margin-top:6px">
+                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#ef4444"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="drop-title" style="color:#ef4444">huge-orders.csv (47 MB)</div>
+                <div class="drop-sub">Drop a smaller file or sample</div>
+              </div>
+              <div class="error-msg" style="margin-top:8px">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                This file is too large for browser processing. Try a sample of up to 50,000 rows.
+              </div>
+            </div>
+            <div>
+              <label class="field-label">Name</label>
+              <input class="input" value="huge-orders" style="margin-top:6px" />
+            </div>
+          </div>
+          <div class="dlg-foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary" disabled>
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Add data source
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 14px 18px; background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; font-size: 13px; color: #1c1917;">
+    <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:15px">Anatomy</strong>
+    <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.7;">
+      <li><strong>Backdrop:</strong> page dims to 55% black + subtle blur, dialog floats at L3 elevation</li>
+      <li><strong>Header:</strong> serif title + small description with the cap reminder</li>
+      <li><strong>Drop zone:</strong> dashed border in default state, becomes a solid card with file icon + name + size + "Change" when a file is picked</li>
+      <li><strong>Name field:</strong> auto-pre-fills with filename (extension stripped) — fully editable</li>
+      <li><strong>Footer actions:</strong> Cancel (outline) + Add data source (primary, disabled until both file and name are set)</li>
+      <li><strong>Error states:</strong> inline error message below drop zone, drop zone gets a red border, primary action disabled</li>
+    </ul>
+  </div>
+
+  <div style="padding: 14px 18px; background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px; font-size: 13px; color: #1c1917; margin-top: 12px;">
+    <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:15px">Open questions</strong>
+    <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.7;">
+      <li>Should the drop zone show a parse progress indicator for files >5,000 rows? (whitepaper §4 says yes — confirming visually)</li>
+      <li>Empty-file error wording: "This file appears empty." — OK?</li>
+      <li>Unsupported-type error wording: "Please upload a CSV or Excel file." — OK?</li>
+    </ul>
+  </div>
+
+</div>

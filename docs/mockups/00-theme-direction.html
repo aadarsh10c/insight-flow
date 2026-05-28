@@ -1,0 +1,160 @@
+<h2>Pick a visual direction for InsightFlow</h2>
+<p class="subtitle">All four use shadcn/ui underneath — they differ in palette, radius, density and overall personality. Each mockup shows the same Chart Builder dialog so you can compare apples to apples. Click the one closest to what you want (you can refine later).</p>
+
+<style>
+  /* Local mockup styles — these don't affect the page chrome */
+  .tm-card { padding: 0; overflow: hidden; }
+  .tm-mock { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; padding: 16px; min-height: 320px; }
+  .tm-bar { display: flex; align-items: center; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--bd); margin-bottom: 12px; font-size: 12px; font-weight: 500; }
+  .tm-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ac); }
+  .tm-row { display: flex; gap: 12px; }
+  .tm-left { flex: 0 0 38%; }
+  .tm-right { flex: 1; background: var(--surface2); border-radius: var(--r); padding: 12px; }
+  .tm-step { padding: 8px 10px; border-radius: var(--r); margin-bottom: 6px; font-size: 11px; }
+  .tm-step.done { background: var(--surface2); color: var(--muted); }
+  .tm-step.active { background: var(--ac-soft); color: var(--ac); border: 1px solid var(--ac); }
+  .tm-step.lock { color: var(--muted); opacity: .5; }
+  .tm-btn { display: inline-block; padding: 6px 12px; border-radius: var(--r); background: var(--ac); color: var(--ac-fg); font-size: 11px; font-weight: 500; }
+  .tm-chart { height: 140px; display: flex; align-items: end; gap: 6px; padding: 8px; }
+  .tm-bar2 { flex: 1; background: var(--ac); border-radius: var(--r-sm) var(--r-sm) 0 0; }
+  .tm-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .tm-sub { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .tm-meta { padding: 10px 14px 14px; font-size: 12px; }
+  .tm-meta strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .tm-meta span { color: var(--muted); font-size: 11px; }
+
+  /* A — Clean Pro */
+  .ta { --bg: #ffffff; --fg: #0a0a0a; --muted: #71717a; --bd: #e4e4e7; --surface2: #f4f4f5; --ac: #2563eb; --ac-fg: #ffffff; --ac-soft: #eff6ff; --r: 6px; --r-sm: 3px; background: var(--bg); color: var(--fg); }
+  /* B — Warm Editorial */
+  .tb { --bg: #fdfbf7; --fg: #1c1917; --muted: #78716c; --bd: #e7e5e4; --surface2: #f5f5f4; --ac: #c2410c; --ac-fg: #ffffff; --ac-soft: #fff7ed; --r: 10px; --r-sm: 6px; background: var(--bg); color: var(--fg); font-family: 'Iowan Old Style', Georgia, serif; }
+  .tb .tm-step, .tb .tm-btn, .tb .tm-bar { font-family: ui-sans-serif, system-ui, sans-serif; }
+  /* C — Modern SaaS */
+  .tc { --bg: #0b0b0f; --fg: #fafafa; --muted: #a1a1aa; --bd: #27272a; --surface2: #18181b; --ac: #8b5cf6; --ac-fg: #ffffff; --ac-soft: #1e1b3a; --r: 8px; --r-sm: 4px; background: var(--bg); color: var(--fg); }
+  /* D — Soft Pastel */
+  .td { --bg: #f0fdfa; --fg: #134e4a; --muted: #5b8a85; --bd: #ccfbf1; --surface2: #ecfeff; --ac: #0d9488; --ac-fg: #ffffff; --ac-soft: #f0fdfa; --r: 14px; --r-sm: 8px; background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%); color: var(--fg); }
+
+  .tm-card .tm-meta { background: #fff; border-top: 1px solid #e5e7eb; }
+  .cards .card { padding: 0 !important; }
+</style>
+
+<div class="cards">
+  <div class="card tm-card" data-choice="clean-pro" onclick="toggleSelect(this)">
+    <div class="tm-mock ta">
+      <div class="tm-bar"><span class="tm-dot"></span> InsightFlow · Chart Builder</div>
+      <div class="tm-row">
+        <div class="tm-left">
+          <div class="tm-step done">1. Chart type ✓</div>
+          <div class="tm-step active">2. Data</div>
+          <div class="tm-step lock">3. Filter</div>
+          <div class="tm-step lock">4. Style</div>
+          <div style="margin-top:10px"><span class="tm-btn">Save Chart</span></div>
+        </div>
+        <div class="tm-right">
+          <div class="tm-title">Sales by Region</div>
+          <div class="tm-sub">Live preview</div>
+          <div class="tm-chart">
+            <div class="tm-bar2" style="height:60%"></div>
+            <div class="tm-bar2" style="height:85%"></div>
+            <div class="tm-bar2" style="height:40%"></div>
+            <div class="tm-bar2" style="height:70%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tm-meta">
+      <strong>A — Clean Pro</strong>
+      <span>Default shadcn · blue accent · 6px radius · Vercel/Linear-adjacent. Trustworthy, neutral, "I built this carefully."</span>
+    </div>
+  </div>
+
+  <div class="card tm-card" data-choice="warm-editorial" onclick="toggleSelect(this)">
+    <div class="tm-mock tb">
+      <div class="tm-bar"><span class="tm-dot"></span> InsightFlow · Chart Builder</div>
+      <div class="tm-row">
+        <div class="tm-left">
+          <div class="tm-step done">1. Chart type ✓</div>
+          <div class="tm-step active">2. Data</div>
+          <div class="tm-step lock">3. Filter</div>
+          <div class="tm-step lock">4. Style</div>
+          <div style="margin-top:10px"><span class="tm-btn">Save Chart</span></div>
+        </div>
+        <div class="tm-right">
+          <div class="tm-title">Sales by Region</div>
+          <div class="tm-sub">Live preview</div>
+          <div class="tm-chart">
+            <div class="tm-bar2" style="height:60%"></div>
+            <div class="tm-bar2" style="height:85%"></div>
+            <div class="tm-bar2" style="height:40%"></div>
+            <div class="tm-bar2" style="height:70%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tm-meta">
+      <strong>B — Warm Editorial</strong>
+      <span>Stone/amber palette · 10px radius · serif headings · Notion/Substack-adjacent. Friendly, calm, "made for humans not analysts."</span>
+    </div>
+  </div>
+
+  <div class="card tm-card" data-choice="modern-saas" onclick="toggleSelect(this)">
+    <div class="tm-mock tc">
+      <div class="tm-bar"><span class="tm-dot"></span> InsightFlow · Chart Builder</div>
+      <div class="tm-row">
+        <div class="tm-left">
+          <div class="tm-step done">1. Chart type ✓</div>
+          <div class="tm-step active">2. Data</div>
+          <div class="tm-step lock">3. Filter</div>
+          <div class="tm-step lock">4. Style</div>
+          <div style="margin-top:10px"><span class="tm-btn">Save Chart</span></div>
+        </div>
+        <div class="tm-right">
+          <div class="tm-title">Sales by Region</div>
+          <div class="tm-sub">Live preview</div>
+          <div class="tm-chart">
+            <div class="tm-bar2" style="height:60%"></div>
+            <div class="tm-bar2" style="height:85%"></div>
+            <div class="tm-bar2" style="height:40%"></div>
+            <div class="tm-bar2" style="height:70%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tm-meta">
+      <strong>C — Modern SaaS (Dark)</strong>
+      <span>Near-black bg · violet accent · 8px radius · Linear/PostHog-adjacent. Premium, "techy" — strong opinions, may feel intimidating to non-tech users.</span>
+    </div>
+  </div>
+
+  <div class="card tm-card" data-choice="soft-pastel" onclick="toggleSelect(this)">
+    <div class="tm-mock td">
+      <div class="tm-bar"><span class="tm-dot"></span> InsightFlow · Chart Builder</div>
+      <div class="tm-row">
+        <div class="tm-left">
+          <div class="tm-step done">1. Chart type ✓</div>
+          <div class="tm-step active">2. Data</div>
+          <div class="tm-step lock">3. Filter</div>
+          <div class="tm-step lock">4. Style</div>
+          <div style="margin-top:10px"><span class="tm-btn">Save Chart</span></div>
+        </div>
+        <div class="tm-right">
+          <div class="tm-title">Sales by Region</div>
+          <div class="tm-sub">Live preview</div>
+          <div class="tm-chart">
+            <div class="tm-bar2" style="height:60%"></div>
+            <div class="tm-bar2" style="height:85%"></div>
+            <div class="tm-bar2" style="height:40%"></div>
+            <div class="tm-bar2" style="height:70%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tm-meta">
+      <strong>D — Soft Pastel</strong>
+      <span>Mint/teal gradient · 14px rounded corners · Cron/Calendar-adjacent. Gentle, optimistic, "this won't be scary" — risk: can feel toy-like.</span>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 24px; padding: 14px 18px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; color: #4b5563;">
+  <strong style="color:#111827">My recommendation:</strong> <strong>A (Clean Pro)</strong> is the safest match for the whitepaper's tone — "trustworthy for business users, accurate without learning the tool." <strong>B (Warm Editorial)</strong> is a strong second if you want the app to feel distinctive and human. C is beautiful but may signal "for developers" to non-tech users. D leans informal — fine for consumer apps, risky for BI.
+</div>

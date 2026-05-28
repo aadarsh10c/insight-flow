@@ -1,0 +1,172 @@
+<h2>Screen 1 of 7 — Home (<code>/</code>)</h2>
+<p class="subtitle">Fullscreen branded landing (no sidebar). Same tokens as the rest of the app, bolder layout liberties: large display type, generous whitespace, subtle accent gradient at top. Two CTAs: primary "Get started" → /datasources, secondary "Try with sample data" → lazy-seeds Superstore + routes to /datasources.</p>
+
+<style>
+  .preview { background: #fdfbf7; border: 1px solid #e7e5e4; border-radius: 12px; overflow: hidden; min-height: 600px; position: relative; font-family: ui-sans-serif, system-ui, sans-serif; }
+  .preview-dark { background: #1c1917; border-color: #44403c; color: #f5f5f4; }
+  .preview .gradient { position: absolute; inset: 0; opacity: 0.65; pointer-events: none; background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(194,65,12,0.18), transparent 70%); }
+  .preview-dark .gradient { background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(234,88,12,0.22), transparent 70%); }
+
+  .header { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand .logo { width: 32px; height: 32px; background: linear-gradient(135deg, #c2410c, #ea580c); border-radius: 8px; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 16px; }
+  .brand .name { font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; font-weight: 600; }
+  .header .right { font-size: 12px; color: #78716c; text-decoration: none; }
+  .preview-dark .header .right { color: #a8a29e; }
+
+  .hero { position: relative; z-index: 1; text-align: center; padding: 80px 24px 100px; max-width: 720px; margin: 0 auto; }
+  .hero h1 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 56px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; margin: 0; color: #1c1917; }
+  .preview-dark .hero h1 { color: #f5f5f4; }
+  .hero p { font-size: 18px; line-height: 1.55; color: #78716c; margin: 24px 0 0; max-width: 560px; margin-left: auto; margin-right: auto; }
+  .preview-dark .hero p { color: #a8a29e; }
+  .ctas { display: flex; justify-content: center; gap: 12px; margin-top: 40px; }
+  .btn { padding: 12px 22px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: 0; }
+  .btn-primary { background: #c2410c; color: #fff; }
+  .preview-dark .btn-primary { background: #ea580c; }
+  .btn-secondary { background: transparent; color: #1c1917; border: 1px solid #e7e5e4; }
+  .preview-dark .btn-secondary { color: #f5f5f4; border-color: #44403c; }
+
+  .visual-strip { position: relative; z-index: 1; padding: 0 48px 40px; max-width: 900px; margin: 0 auto; }
+  .visual-strip .strip { background: #fff; border: 1px solid #e7e5e4; border-radius: 12px; padding: 18px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  .preview-dark .visual-strip .strip { background: #292524; border-color: #44403c; }
+  .strip-card { display: flex; flex-direction: column; gap: 6px; }
+  .strip-card .icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(194,65,12,0.1); color: #c2410c; display: grid; place-items: center; }
+  .preview-dark .strip-card .icon { background: rgba(234,88,12,0.15); color: #fb923c; }
+  .strip-card .ttl { font-size: 13px; font-weight: 600; }
+  .strip-card .desc { font-size: 12px; color: #78716c; line-height: 1.45; }
+  .preview-dark .strip-card .desc { color: #a8a29e; }
+
+  .footer { position: relative; z-index: 1; padding: 24px 48px; display: flex; justify-content: space-between; font-size: 11px; color: #78716c; border-top: 1px solid #f0ede9; }
+  .preview-dark .footer { color: #a8a29e; border-top-color: #44403c; }
+
+  .panel-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #6b7280; padding: 8px 14px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
+
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; background: rgba(194,65,12,0.1); color: #c2410c; margin-right: 4px; }
+
+  .icon-svg { width: 16px; height: 16px; }
+</style>
+
+<div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+
+  <!-- LIGHT -->
+  <div style="border:1px solid #e7e5e4;border-radius:12px;overflow:hidden;">
+    <div class="panel-label">Light</div>
+    <div class="preview">
+      <div class="gradient"></div>
+      <header class="header">
+        <div class="brand"><div class="logo">i</div><span class="name">InsightFlow</span></div>
+        <a href="#" class="right">Style Guide</a>
+      </header>
+      <section class="hero">
+        <h1>Charts your team<br>can actually build</h1>
+        <p>Upload your data, pick what you want to see. InsightFlow guides you through every step — no dropdowns to decode, no chart-builder jargon. Just the chart you wanted, fast.</p>
+        <div class="ctas">
+          <button class="btn btn-primary">
+            Get started
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+          <button class="btn btn-secondary">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2 4 4 2-4 2-2 4-2-4-4-2 4-2z"/></svg>
+            Try with sample data
+          </button>
+        </div>
+      </section>
+      <div class="visual-strip">
+        <div class="strip">
+          <div class="strip-card">
+            <div class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg></div>
+            <div class="ttl">Upload your data</div>
+            <div class="desc">CSV or Excel. We figure out the types.</div>
+          </div>
+          <div class="strip-card">
+            <div class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></div>
+            <div class="ttl">Pick what to see</div>
+            <div class="desc">Guided four-step flow. No jargon.</div>
+          </div>
+          <div class="strip-card">
+            <div class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="ttl">Done</div>
+            <div class="desc">Live preview at every step. Always accurate.</div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <span>InsightFlow</span>
+        <span>v0.1</span>
+      </footer>
+    </div>
+  </div>
+
+  <!-- DARK -->
+  <div style="border:1px solid #e7e5e4;border-radius:12px;overflow:hidden;">
+    <div class="panel-label">Dark</div>
+    <div class="preview preview-dark">
+      <div class="gradient"></div>
+      <header class="header">
+        <div class="brand"><div class="logo">i</div><span class="name">InsightFlow</span></div>
+        <a href="#" class="right">Style Guide</a>
+      </header>
+      <section class="hero">
+        <h1>Charts your team<br>can actually build</h1>
+        <p>Upload your data, pick what you want to see. InsightFlow guides you through every step — no dropdowns to decode, no chart-builder jargon. Just the chart you wanted, fast.</p>
+        <div class="ctas">
+          <button class="btn btn-primary">
+            Get started
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+          <button class="btn btn-secondary">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2 4 4 2-4 2-2 4-2-4-4-2 4-2z"/></svg>
+            Try with sample data
+          </button>
+        </div>
+      </section>
+      <div class="visual-strip">
+        <div class="strip">
+          <div class="strip-card">
+            <div class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg></div>
+            <div class="ttl">Upload your data</div>
+            <div class="desc">CSV or Excel. We figure out the types.</div>
+          </div>
+          <div class="strip-card">
+            <div class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></div>
+            <div class="ttl">Pick what to see</div>
+            <div class="desc">Guided four-step flow. No jargon.</div>
+          </div>
+          <div class="strip-card">
+            <div class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="ttl">Done</div>
+            <div class="desc">Live preview at every step. Always accurate.</div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <span>InsightFlow</span>
+        <span>v0.1</span>
+      </footer>
+    </div>
+  </div>
+
+</div>
+
+<div style="padding: 14px 18px; background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; font-size: 13px; color: #1c1917;">
+  <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:15px">Anatomy</strong>
+  <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.7;">
+    <li><span class="pill">Header</span> Logo + brand · "Style Guide" link top-right. No sidebar.</li>
+    <li><span class="pill">Hero</span> 56px serif display headline · ~18px muted subhead · two CTAs side by side</li>
+    <li><span class="pill">Visual strip</span> A 3-card row below CTA showing the 3-step flow (upload → pick → done). Acts as a credibility & expectation-setter</li>
+    <li><span class="pill">Subtle gradient</span> Warm accent radial at the top — distinct from the flat product chrome below</li>
+    <li><span class="pill">Footer</span> Tiny app name + version</li>
+  </ul>
+</div>
+
+<div style="padding: 14px 18px; background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px; font-size: 13px; color: #1c1917; margin-top: 12px;">
+  <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:15px">Things you could change</strong>
+  <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.7;">
+    <li>Headline copy ("Charts your team can actually build" — could be different)</li>
+    <li>Subhead copy</li>
+    <li>Drop the 3-card visual strip if too much</li>
+    <li>Add or remove the gradient</li>
+    <li>Move "Style Guide" link to footer instead of header</li>
+    <li>Layout itself (e.g., add a screenshot/illustration on the right side of the hero)</li>
+  </ul>
+</div>

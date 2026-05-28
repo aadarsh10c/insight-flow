@@ -1,0 +1,391 @@
+<h2>Screen 4 of 7 — Reports list (<code>/reports</code>)</h2>
+<p class="subtitle">Sidebar on left (Reports active). Table of every saved report. Whole row is clickable → opens report detail. Per-row Delete action (with confirm). Empty state when none. Light + dark for populated; empty + delete-confirm shown light only.</p>
+
+<style>
+  .rp { font-family: ui-sans-serif, system-ui, sans-serif; }
+  .panel-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #6b7280; padding: 8px 14px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
+
+  /* Shell */
+  .rp-shell { border: 1px solid #e7e5e4; border-radius: 12px; overflow: hidden; min-height: 540px; }
+  .rp-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 540px; }
+  .light { background: #fdfbf7; color: #1c1917; }
+  .dark { background: #1c1917; color: #f5f5f4; }
+  .dark.rp-shell { border-color: #44403c; }
+
+  /* Sidebar */
+  .sidebar { background: #fff; border-right: 1px solid #e7e5e4; padding: 18px 12px; display: flex; flex-direction: column; }
+  .dark .sidebar { background: #292524; border-right-color: #44403c; }
+  .sb-brand { padding: 6px 8px 18px; display: flex; align-items: center; gap: 8px; }
+  .sb-brand .logo { width: 26px; height: 26px; background: linear-gradient(135deg,#c2410c,#ea580c); border-radius: 8px; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 13px; }
+  .sb-brand span { font-family: 'Iowan Old Style', Georgia, serif; font-size: 15px; font-weight: 600; }
+  .sb-nav { display: flex; flex-direction: column; gap: 2px; }
+  .sb-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 13px; color: #44403c; cursor: pointer; }
+  .dark .sb-item { color: #d6d3d1; }
+  .sb-item.active { background: #fff7ed; color: #c2410c; font-weight: 500; }
+  .dark .sb-item.active { background: rgba(234,88,12,0.12); color: #fb923c; }
+  .sb-item.disabled { opacity: 0.4; cursor: not-allowed; }
+  .sb-divider { height: 1px; background: #e7e5e4; margin: 12px 4px; }
+  .dark .sb-divider { background: #44403c; }
+  .sb-foot { margin-top: auto; padding: 12px 8px; }
+  .sb-theme { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; font-size: 11px; color: #78716c; cursor: pointer; }
+  .dark .sb-theme { color: #a8a29e; }
+
+  .main { padding: 28px 32px; overflow-y: auto; }
+  .page-head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 24px; }
+  .page-head h1 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 22px; font-weight: 600; margin: 0; }
+  .page-head .sub { font-size: 12px; color: #78716c; margin-top: 4px; }
+  .dark .page-head .sub { color: #a8a29e; }
+  .btn-primary { padding: 8px 14px; background: #c2410c; color: #fff; border-radius: 8px; font-size: 13px; font-weight: 500; border: 0; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .dark .btn-primary { background: #ea580c; }
+
+  /* Search */
+  .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .search { position: relative; flex: 1; max-width: 360px; }
+  .search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: #78716c; pointer-events: none; }
+  .search input { width: 100%; padding: 8px 12px 8px 32px; background: #fff; border: 1px solid #e7e5e4; border-radius: 8px; font-size: 13px; color: #1c1917; font-family: inherit; box-sizing: border-box; }
+  .dark .search input { background: #292524; border-color: #44403c; color: #f5f5f4; }
+  .dark .search svg { color: #a8a29e; }
+  .search input:focus { outline: none; border-color: #c2410c; box-shadow: 0 0 0 3px rgba(194,65,12,0.15); }
+  .search input::placeholder { color: #a8a29e; }
+  .results-count { font-size: 12px; color: #78716c; }
+  .dark .results-count { color: #a8a29e; }
+
+  /* Table */
+  .rp-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; overflow: hidden; }
+  .dark .rp-table { background: #292524; border-color: #44403c; }
+  .rp-table th { text-align: left; padding: 10px 14px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #78716c; font-weight: 600; background: #f9fafb; border-bottom: 1px solid #e7e5e4; }
+  .dark .rp-table th { background: #1c1917; color: #a8a29e; border-bottom-color: #44403c; }
+  .rp-table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid #f0ede9; vertical-align: middle; }
+  .dark .rp-table td { border-bottom-color: #363130; }
+  .rp-table tr:last-child td { border-bottom: 0; }
+  .rp-table tr.row-clickable { cursor: pointer; }
+  .rp-table tr.row-clickable:hover { background: #fdfbf7; }
+  .dark .rp-table tr.row-clickable:hover { background: #363130; }
+  .rp-name { font-weight: 500; color: #1c1917; }
+  .dark .rp-name { color: #f5f5f4; }
+  .rp-desc, .rp-meta { color: #78716c; }
+  .dark .rp-desc, .dark .rp-meta { color: #a8a29e; }
+  .delete-btn { padding: 6px; background: transparent; border-radius: 6px; color: #b91c1c; cursor: pointer; border: 0; }
+  .delete-btn:hover { background: rgba(185,28,28,0.08); }
+  .dark .delete-btn { color: #ef4444; }
+  .dark .delete-btn:hover { background: rgba(239,68,68,0.12); }
+
+  /* Empty state */
+  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 16px; text-align: center; color: #78716c; }
+  .empty-icon { width: 48px; height: 48px; margin-bottom: 14px; color: #c2410c; opacity: 0.4; }
+  .empty h2 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; font-weight: 600; color: #1c1917; margin: 0 0 6px; }
+  .empty p { margin: 0; font-size: 13px; }
+
+  /* Confirm dialog overlay */
+  .overlay { position: relative; }
+  .overlay .dim { position: absolute; inset: 0; background: rgba(28,25,23,0.55); backdrop-filter: blur(3px); display: grid; place-items: center; }
+  .confirm-dlg { width: 100%; max-width: 420px; background: #fafaf9; border: 1px solid #e7e5e4; border-radius: 12px; box-shadow: 0 10px 30px rgba(28,25,23,0.18); overflow: hidden; }
+  .confirm-dlg .head { padding: 18px 22px 4px; }
+  .confirm-dlg h3 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 16px; font-weight: 600; margin: 0; }
+  .confirm-dlg p { font-size: 13px; color: #78716c; margin: 4px 0 0; }
+  .confirm-dlg .foot { padding: 14px 22px 18px; display: flex; justify-content: flex-end; gap: 8px; }
+  .btn { padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 0; }
+  .btn-outline { background: transparent; color: #1c1917; border: 1px solid #e7e5e4; }
+  .btn-destructive { background: #b91c1c; color: #fff; }
+
+  .icon-svg { width: 14px; height: 14px; }
+</style>
+
+<div class="rp">
+
+  <!-- POPULATED · LIGHT + DARK -->
+  <h3 style="font-family:'Iowan Old Style',Georgia,serif;font-size:18px;margin:8px 0 12px;">Populated · light + dark</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+
+    <!-- LIGHT -->
+    <div class="rp-shell light">
+      <div class="panel-label">Light · 3 reports</div>
+      <div class="rp-layout">
+        <aside class="sidebar">
+          <div class="sb-brand"><div class="logo">i</div><span>InsightFlow</span></div>
+          <nav class="sb-nav">
+            <div class="sb-item">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              Home
+            </div>
+            <div class="sb-item">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
+              Data Sources
+            </div>
+            <div class="sb-item active">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Reports
+            </div>
+            <div class="sb-divider"></div>
+            <div class="sb-item">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2a10 10 0 0 0 0 20c1.7 0 3-1.3 3-3 0-.6-.2-1.1-.6-1.6-.4-.4-.6-1-.6-1.5 0-.7.6-1.4 1.4-1.4H17a5 5 0 0 0 5-5c0-4.4-4.5-7.5-10-7.5z"/></svg>
+              Style Guide
+            </div>
+            <div class="sb-item disabled">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/></svg>
+              Settings
+            </div>
+          </nav>
+          <div class="sb-foot"><div class="sb-theme"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/></svg>System</div></div>
+        </aside>
+        <main class="main">
+          <div class="page-head">
+            <div>
+              <h1>Reports</h1>
+              <div class="sub">3 reports</div>
+            </div>
+            <button class="btn-primary"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Report</button>
+          </div>
+          <div class="toolbar">
+            <div class="search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search reports by name or description…" />
+            </div>
+            <span class="results-count">3 of 3</span>
+          </div>
+          <table class="rp-table">
+            <thead>
+              <tr><th>Name</th><th>Description</th><th>Data source</th><th>Last modified</th><th style="text-align:right">Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr class="row-clickable">
+                <td><span class="rp-name">Sales by Region</span></td>
+                <td class="rp-desc">Quarterly overview by territory</td>
+                <td>Superstore 2024</td>
+                <td class="rp-meta">2 hours ago</td>
+                <td style="text-align:right">
+                  <button class="delete-btn" aria-label="Delete Sales by Region">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="row-clickable">
+                <td><span class="rp-name">Furniture margin trend</span></td>
+                <td class="rp-desc">Profit margin over time</td>
+                <td>Superstore 2024</td>
+                <td class="rp-meta">Yesterday</td>
+                <td style="text-align:right">
+                  <button class="delete-btn" aria-label="Delete Furniture margin trend">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="row-clickable">
+                <td><span class="rp-name">Channel mix Q3</span></td>
+                <td class="rp-desc">—</td>
+                <td>Marketing Channels</td>
+                <td class="rp-meta">Last week</td>
+                <td style="text-align:right">
+                  <button class="delete-btn" aria-label="Delete Channel mix Q3">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </main>
+      </div>
+    </div>
+
+    <!-- DARK -->
+    <div class="rp-shell dark">
+      <div class="panel-label">Dark · 3 reports</div>
+      <div class="rp-layout">
+        <aside class="sidebar">
+          <div class="sb-brand"><div class="logo">i</div><span>InsightFlow</span></div>
+          <nav class="sb-nav">
+            <div class="sb-item">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              Home
+            </div>
+            <div class="sb-item">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg>
+              Data Sources
+            </div>
+            <div class="sb-item active">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Reports
+            </div>
+            <div class="sb-divider"></div>
+            <div class="sb-item">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2a10 10 0 0 0 0 20c1.7 0 3-1.3 3-3 0-.6-.2-1.1-.6-1.6-.4-.4-.6-1-.6-1.5 0-.7.6-1.4 1.4-1.4H17a5 5 0 0 0 5-5c0-4.4-4.5-7.5-10-7.5z"/></svg>
+              Style Guide
+            </div>
+            <div class="sb-item disabled">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/></svg>
+              Settings
+            </div>
+          </nav>
+        </aside>
+        <main class="main">
+          <div class="page-head">
+            <div>
+              <h1>Reports</h1>
+              <div class="sub">3 reports</div>
+            </div>
+            <button class="btn-primary"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Report</button>
+          </div>
+          <div class="toolbar">
+            <div class="search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search reports by name or description…" />
+            </div>
+            <span class="results-count">3 of 3</span>
+          </div>
+          <table class="rp-table">
+            <thead>
+              <tr><th>Name</th><th>Description</th><th>Data source</th><th>Last modified</th><th style="text-align:right">Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr class="row-clickable">
+                <td><span class="rp-name">Sales by Region</span></td>
+                <td class="rp-desc">Quarterly overview by territory</td>
+                <td>Superstore 2024</td>
+                <td class="rp-meta">2 hours ago</td>
+                <td style="text-align:right">
+                  <button class="delete-btn" aria-label="Delete Sales by Region">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="row-clickable">
+                <td><span class="rp-name">Furniture margin trend</span></td>
+                <td class="rp-desc">Profit margin over time</td>
+                <td>Superstore 2024</td>
+                <td class="rp-meta">Yesterday</td>
+                <td style="text-align:right">
+                  <button class="delete-btn" aria-label="Delete Furniture margin trend">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr class="row-clickable">
+                <td><span class="rp-name">Channel mix Q3</span></td>
+                <td class="rp-desc">—</td>
+                <td>Marketing Channels</td>
+                <td class="rp-meta">Last week</td>
+                <td style="text-align:right">
+                  <button class="delete-btn" aria-label="Delete Channel mix Q3">
+                    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </main>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EMPTY + DELETE CONFIRM -->
+  <h3 style="font-family:'Iowan Old Style',Georgia,serif;font-size:18px;margin:8px 0 12px;">Empty state · Delete confirm overlay (light)</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+    <!-- EMPTY -->
+    <div class="rp-shell light">
+      <div class="panel-label">Empty state</div>
+      <div class="rp-layout">
+        <aside class="sidebar">
+          <div class="sb-brand"><div class="logo">i</div><span>InsightFlow</span></div>
+          <nav class="sb-nav">
+            <div class="sb-item">Home</div>
+            <div class="sb-item">Data Sources</div>
+            <div class="sb-item active">Reports</div>
+            <div class="sb-divider"></div>
+            <div class="sb-item">Style Guide</div>
+            <div class="sb-item disabled">Settings</div>
+          </nav>
+        </aside>
+        <main class="main">
+          <div class="page-head">
+            <div>
+              <h1>Reports</h1>
+              <div class="sub">0 reports</div>
+            </div>
+            <button class="btn-primary"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Report</button>
+          </div>
+          <div class="empty">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <h2>No reports yet</h2>
+            <p>Click "+ Add Report" to build your first chart.</p>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- DELETE CONFIRM -->
+    <div class="rp-shell light overlay">
+      <div class="panel-label">Delete confirm overlay</div>
+      <div class="rp-layout">
+        <aside class="sidebar">
+          <div class="sb-brand"><div class="logo">i</div><span>InsightFlow</span></div>
+          <nav class="sb-nav">
+            <div class="sb-item">Home</div>
+            <div class="sb-item">Data Sources</div>
+            <div class="sb-item active">Reports</div>
+            <div class="sb-divider"></div>
+            <div class="sb-item">Style Guide</div>
+            <div class="sb-item disabled">Settings</div>
+          </nav>
+        </aside>
+        <main class="main">
+          <div class="page-head">
+            <div>
+              <h1>Reports</h1>
+              <div class="sub">3 reports</div>
+            </div>
+            <button class="btn-primary">+ Add Report</button>
+          </div>
+          <table class="rp-table">
+            <thead><tr><th>Name</th><th>Description</th><th>Data source</th><th>Created</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><span class="rp-name">Sales by Region</span></td><td class="rp-desc">Quarterly overview</td><td>Superstore</td><td class="rp-meta">2h ago</td><td></td></tr>
+              <tr><td><span class="rp-name">Furniture margin trend</span></td><td class="rp-desc">Profit over time</td><td>Superstore</td><td class="rp-meta">Yesterday</td><td></td></tr>
+            </tbody>
+          </table>
+        </main>
+      </div>
+      <div class="dim">
+        <div class="confirm-dlg">
+          <div class="head">
+            <h3>Delete report 'Sales by Region'?</h3>
+            <p>This cannot be undone.</p>
+          </div>
+          <div class="foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-destructive">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 14px 18px; background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; font-size: 13px; color: #1c1917; margin-top: 18px;">
+    <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:15px">Anatomy</strong>
+    <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.7;">
+      <li>Sidebar: Reports active</li>
+      <li>Page header: title "Reports" + count subtitle + "+ Add Report" primary button right</li>
+      <li>Table columns: Name · Description (truncated to ~80 chars, "—" if empty) · Data source name · Created (relative time) · Actions</li>
+      <li>Row is clickable — entire row navigates to /reports/:id on click (hover state: subtle warm cream background)</li>
+      <li>Delete action: destructive-colored trash icon button, right-aligned. Click stops row navigation, opens ConfirmDialog</li>
+      <li>ConfirmDialog: serif title "Delete report '&lt;name&gt;'?" + muted "This cannot be undone." + Cancel (outline) / Delete (destructive)</li>
+      <li>Empty state: file-text icon, "No reports yet", nudge text</li>
+    </ul>
+  </div>
+
+  <div style="padding: 14px 18px; background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px; font-size: 13px; color: #1c1917; margin-top: 12px;">
+    <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:15px">Open questions</strong>
+    <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.7;">
+      <li>Show "Last modified" instead of (or in addition to) "Created"? Currently just Created.</li>
+      <li>Empty description shows "—". OK, or leave blank?</li>
+      <li>Sort order: most-recently-created first (default), or alphabetical? Currently most-recent first.</li>
+      <li>Should there be a search/filter on the list? Probably V2.</li>
+    </ul>
+  </div>
+
+</div>

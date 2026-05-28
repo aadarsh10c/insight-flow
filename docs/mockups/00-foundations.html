@@ -1,0 +1,199 @@
+<h2>InsightFlow — Foundations v2 · Full Style Guide Preview</h2>
+<p class="subtitle">This is the visual blueprint for the future <code>/styleguide</code> route. All decisions in one place: color · type · spacing · radius · elevation · shadow · icons · focus · motion · Plotly palette · principles.</p>
+
+<style>
+  .fnd { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .section { margin-bottom: 36px; padding-top: 8px; }
+  .section h3 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 20px; margin: 0 0 4px; }
+  .section .sd { font-size: 13px; color: #78716c; margin-bottom: 16px; }
+  .card-box { background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; padding: 16px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  code { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 12px; background: #f5f5f4; padding: 1px 6px; border-radius: 4px; }
+
+  /* Spacing demo */
+  .sp-row { display: flex; align-items: center; gap: 16px; padding: 6px 0; }
+  .sp-row .tk { width: 80px; font-family: ui-monospace, monospace; font-size: 11px; color: #78716c; }
+  .sp-row .px { width: 60px; font-size: 11px; color: #78716c; }
+  .sp-bar { background: #c2410c; height: 14px; border-radius: 3px; }
+
+  /* Radius demo */
+  .rd-row { display: flex; gap: 14px; }
+  .rd-tile { flex: 1; background: #fff7ed; border: 1px solid #fdba74; padding: 14px; text-align: center; font-size: 12px; color: #9a3412; }
+
+  /* Icons demo */
+  .ic-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .ic-tile { background: #fff; border: 1px solid #e7e5e4; border-radius: 8px; padding: 14px; text-align: center; font-size: 11px; color: #78716c; }
+  .ic-tile svg { display: block; margin: 0 auto 6px; color: #1c1917; }
+  .ic-stroke { display: flex; gap: 20px; padding: 10px 0; align-items: center; }
+  .ic-stroke svg { color: #1c1917; }
+
+  /* Focus demo */
+  .fc-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .fc-btn { padding: 8px 16px; background: #c2410c; color: #fff; border-radius: 8px; font-size: 13px; font-weight: 500; border: 0; cursor: pointer; }
+  .fc-btn.focused { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(194,65,12,.5); }
+  .fc-input { padding: 8px 12px; border: 1px solid #e7e5e4; border-radius: 8px; font-size: 13px; background: #fff; }
+  .fc-input.focused { border-color: #c2410c; box-shadow: 0 0 0 3px rgba(194,65,12,.18); outline: 0; }
+
+  /* Palette swatches */
+  .plotly-pal { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .plotly-sw { padding: 8px; border-radius: 8px; color: #fff; font-size: 11px; font-family: ui-monospace, monospace; min-height: 64px; display: flex; flex-direction: column; justify-content: space-between; }
+  .plotly-sw b { font-family: ui-sans-serif, sans-serif; font-weight: 600; font-size: 11px; }
+
+  /* Mini chart palette demo */
+  .demo-chart { display: flex; gap: 6px; align-items: end; height: 110px; padding: 8px; background: #fff; border: 1px solid #e7e5e4; border-radius: 8px; }
+  .demo-chart .dc-bar { flex: 1; border-radius: 4px 4px 0 0; }
+
+  /* Inline minimal table */
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; overflow: hidden; }
+  table.tbl th, table.tbl td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #f0ede9; }
+  table.tbl th { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #6b7280; font-weight: 600; background: #f9fafb; }
+  table.tbl tr:last-child td { border-bottom: 0; }
+</style>
+
+<div class="fnd">
+
+  <!-- ========== SUMMARY HEADER ========== -->
+  <div class="section">
+    <h3>Locked decisions · v1</h3>
+    <div class="sd">Stack: React 19 · Tailwind CSS v4 · shadcn/ui · Plotly · Lucide icons · Zustand · Vite · Vercel. Theme: Warm Editorial (light + dark).</div>
+  </div>
+
+  <!-- ========== 1. SPACING ========== -->
+  <div class="section">
+    <h3>1 · Spacing scale</h3>
+    <div class="sd">Tailwind 4px grid. Use only these "blessed" steps — don't invent in-betweens.</div>
+    <div class="card-box">
+      <div class="sp-row"><span class="tk">spacing-1</span><span class="px">4px</span><div class="sp-bar" style="width:4px"></div><span style="font-size:11px;color:#78716c">icon ↔ text gap</span></div>
+      <div class="sp-row"><span class="tk">spacing-2</span><span class="px">8px</span><div class="sp-bar" style="width:8px"></div><span style="font-size:11px;color:#78716c">tag padding, inline gap</span></div>
+      <div class="sp-row"><span class="tk">spacing-3</span><span class="px">12px</span><div class="sp-bar" style="width:12px"></div><span style="font-size:11px;color:#78716c">input padding-y, small gap</span></div>
+      <div class="sp-row"><span class="tk">spacing-4</span><span class="px">16px</span><div class="sp-bar" style="width:16px"></div><span style="font-size:11px;color:#78716c">card padding, default gap</span></div>
+      <div class="sp-row"><span class="tk">spacing-6</span><span class="px">24px</span><div class="sp-bar" style="width:24px"></div><span style="font-size:11px;color:#78716c">section gap inside card</span></div>
+      <div class="sp-row"><span class="tk">spacing-8</span><span class="px">32px</span><div class="sp-bar" style="width:32px"></div><span style="font-size:11px;color:#78716c">major section gap</span></div>
+      <div class="sp-row"><span class="tk">spacing-12</span><span class="px">48px</span><div class="sp-bar" style="width:48px"></div><span style="font-size:11px;color:#78716c">page padding, top margin</span></div>
+      <div class="sp-row"><span class="tk">spacing-16</span><span class="px">64px</span><div class="sp-bar" style="width:64px"></div><span style="font-size:11px;color:#78716c">screen-level breathing room</span></div>
+    </div>
+  </div>
+
+  <!-- ========== 2. RADIUS ========== -->
+  <div class="section">
+    <h3>2 · Border radius scale</h3>
+    <div class="sd">Five steps. Pick by element type, not by feeling.</div>
+    <div class="card-box">
+      <div class="rd-row">
+        <div class="rd-tile" style="border-radius:4px"><strong>sm · 4px</strong><br>tags, badges, dividers-as-pills</div>
+        <div class="rd-tile" style="border-radius:8px"><strong>md · 8px</strong><br>buttons, inputs, small chips</div>
+        <div class="rd-tile" style="border-radius:10px"><strong>lg · 10px</strong><br>cards, panels (default)</div>
+        <div class="rd-tile" style="border-radius:12px"><strong>xl · 12px</strong><br>modals, dialogs, large cards</div>
+        <div class="rd-tile" style="border-radius:9999px"><strong>full</strong><br>avatars, dots, pill buttons</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 3. ICONS ========== -->
+  <div class="section">
+    <h3>3 · Iconography · Lucide</h3>
+    <div class="sd">One library, one stroke, one tone. Never mix icon families.</div>
+    <div class="card-box">
+      <div style="font-size:12px;font-weight:600;color:#78716c;margin-bottom:8px;letter-spacing:.04em;text-transform:uppercase">Size scale</div>
+      <div class="ic-grid">
+        <div class="ic-tile"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div><code>14px</code></div>inline w/ text</div>
+        <div class="ic-tile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div><code>16px</code></div>default UI</div>
+        <div class="ic-tile"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div><code>18px</code></div>buttons</div>
+        <div class="ic-tile"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div><code>20px</code></div>section headers</div>
+        <div class="ic-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div><code>24px</code></div>empty states</div>
+        <div class="ic-tile"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><div><code>32px</code></div>hero/empty</div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#78716c;margin:20px 0 8px;letter-spacing:.04em;text-transform:uppercase">Stroke weight</div>
+      <div class="ic-stroke">
+        <span style="font-size:12px;color:#78716c">default 1.5</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+        <span style="font-size:12px;color:#78716c">emphasis 2.0</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+      </div>
+      <div style="font-size:12px;color:#78716c;margin-top:8px">Color = <code>currentColor</code>. Never set explicit icon color — it inherits from the text context.</div>
+    </div>
+  </div>
+
+  <!-- ========== 4. FOCUS RINGS ========== -->
+  <div class="section">
+    <h3>4 · Focus rings · keyboard accessibility</h3>
+    <div class="sd">Two patterns — one for solid elements (buttons), one for input fields. Always <code>focus-visible</code> only, never on mouse click.</div>
+    <div class="card-box">
+      <div style="font-size:12px;font-weight:600;color:#78716c;margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase">Solid button (outer ring)</div>
+      <div class="fc-row" style="margin-bottom:18px">
+        <button class="fc-btn">Default</button>
+        <button class="fc-btn focused">Focused (keyboard)</button>
+        <span style="font-size:12px;color:#78716c"><code>focus-visible:ring-2 ring-offset-2 ring-accent/50</code></span>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:#78716c;margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase">Input field (inner glow + border swap)</div>
+      <div class="fc-row">
+        <input class="fc-input" placeholder="Default state">
+        <input class="fc-input focused" placeholder="Focused state" value="In focus">
+        <span style="font-size:12px;color:#78716c">border becomes accent + soft glow ring</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 5. PLOTLY PALETTE ========== -->
+  <div class="section">
+    <h3>5 · Plotly chart palette</h3>
+    <div class="sd">Separate from UI accent. 6 categorical colors at similar weight, distinguishable in both modes, accessible-ish. + Sequential ramp for single-series.</div>
+    <div class="card-box">
+      <div style="font-size:12px;font-weight:600;color:#78716c;margin-bottom:10px;letter-spacing:.04em;text-transform:uppercase">Categorical (bar & pie · multi-series)</div>
+      <div class="plotly-pal">
+        <div class="plotly-sw" style="background:#c2410c"><b>1 · orange</b><span>#c2410c</span></div>
+        <div class="plotly-sw" style="background:#0e7490"><b>2 · cyan</b><span>#0e7490</span></div>
+        <div class="plotly-sw" style="background:#15803d"><b>3 · green</b><span>#15803d</span></div>
+        <div class="plotly-sw" style="background:#6d28d9"><b>4 · violet</b><span>#6d28d9</span></div>
+        <div class="plotly-sw" style="background:#a16207"><b>5 · amber</b><span>#a16207</span></div>
+        <div class="plotly-sw" style="background:#be185d"><b>6 · pink</b><span>#be185d</span></div>
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:#78716c;margin:18px 0 10px;letter-spacing:.04em;text-transform:uppercase">Sequential (line chart · single series · uses accent)</div>
+      <div class="demo-chart">
+        <div class="dc-bar" style="background:#c2410c;height:55%"></div>
+        <div class="dc-bar" style="background:#c2410c;height:80%"></div>
+        <div class="dc-bar" style="background:#c2410c;height:40%"></div>
+        <div class="dc-bar" style="background:#c2410c;height:70%"></div>
+        <div class="dc-bar" style="background:#c2410c;height:90%"></div>
+        <div class="dc-bar" style="background:#c2410c;height:62%"></div>
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:#78716c;margin:18px 0 10px;letter-spacing:.04em;text-transform:uppercase">All 6 in a pie (categorical demo)</div>
+      <div class="demo-chart">
+        <div class="dc-bar" style="background:#c2410c;height:55%"></div>
+        <div class="dc-bar" style="background:#0e7490;height:80%"></div>
+        <div class="dc-bar" style="background:#15803d;height:40%"></div>
+        <div class="dc-bar" style="background:#6d28d9;height:70%"></div>
+        <div class="dc-bar" style="background:#a16207;height:90%"></div>
+        <div class="dc-bar" style="background:#be185d;height:62%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 6. RECAP TABLE ========== -->
+  <div class="section">
+    <h3>6 · Quick reference (the full rulebook)</h3>
+    <table class="tbl">
+      <thead><tr><th>System</th><th>Token / Rule</th><th>When to use</th></tr></thead>
+      <tbody>
+        <tr><td>Color</td><td><code>bg-background</code>, <code>text-foreground</code>, <code>text-muted-foreground</code>, <code>bg-accent</code></td><td>Always semantic — never hex</td></tr>
+        <tr><td>Type</td><td>6 sizes: display / title / heading / body / small / caption</td><td>Pick by purpose, not by appearance</td></tr>
+        <tr><td>Spacing</td><td>4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 px</td><td>Never use intermediate values</td></tr>
+        <tr><td>Radius</td><td>sm 4 / md 8 / lg 10 / xl 12 / full</td><td>By element type, not vibe</td></tr>
+        <tr><td>Elevation</td><td>L1 page / L2 card / L3 modal / L4 toast</td><td>Pick L → token applies the rest</td></tr>
+        <tr><td>Shadow</td><td><code>shadow-sm/md/lg</code> + dark-mode ring</td><td>Never set inline; via elevation</td></tr>
+        <tr><td>Icons</td><td>Lucide · 14/16/18/20/24/32 · stroke 1.5</td><td>currentColor always</td></tr>
+        <tr><td>Focus</td><td><code>focus-visible</code> + ring-2 + offset-2</td><td>Keyboard only</td></tr>
+        <tr><td>Motion</td><td>fast 120 / base 200 / slow 320 · ease-out in, ease-in out</td><td>Causal, never decorative</td></tr>
+        <tr><td>Chart palette</td><td>6 categorical colors · sequential = accent ramp</td><td>Separate from UI accent</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section" style="margin-top: 32px; padding: 16px 18px; background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px;">
+    <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:16px">Next step</strong>
+    <div style="font-size:13px;color:#78716c;margin-top:4px">If this all looks right, I'll write the canonical <code>docs/StyleGuide.md</code> file (which the <code>/styleguide</code> route in the app will mirror) and then move to the deep whitepaper analysis.</div>
+  </div>
+
+</div>

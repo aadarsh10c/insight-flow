@@ -1,0 +1,306 @@
+<h2>Screen 5 of 7 — Add Report dialog</h2>
+<p class="subtitle">Triggered from /reports → "+ Add Report" or from /datasources → "Create Report" (which preselects a data source). Three sections: data source · name + description · column config. Wider dialog (max-width ~720px) to fit the column table. Light + dark.</p>
+
+<style>
+  .ar { font-family: ui-sans-serif, system-ui, sans-serif; }
+  .panel-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #6b7280; padding: 8px 14px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
+
+  .stage { padding: 24px; background: rgba(28,25,23,0.55); backdrop-filter: blur(4px); min-height: 720px; display: grid; place-items: center; }
+  .stage-dark { background: rgba(0,0,0,0.75); }
+
+  .dlg { width: 100%; max-width: 720px; max-height: 85vh; background: #fafaf9; border: 1px solid #e7e5e4; border-radius: 12px; box-shadow: 0 10px 30px rgba(28,25,23,0.12); overflow: hidden; display: flex; flex-direction: column; }
+  .dlg-dark { background: #2c2826; border-color: #57534e; color: #f5f5f4; box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 12px 32px rgba(0,0,0,0.5); }
+
+  .dlg-head { padding: 18px 22px 4px; border-bottom: 1px solid #f0ede9; }
+  .dlg-dark .dlg-head { border-bottom-color: #44403c; }
+  .dlg-head h2 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 20px; font-weight: 600; margin: 0; }
+  .dlg-head p { font-size: 13px; color: #78716c; margin: 4px 0 14px; }
+  .dlg-dark .dlg-head p { color: #a8a29e; }
+
+  .dlg-body { padding: 20px 22px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 18px; }
+
+  .field-label { font-size: 12px; font-weight: 500; color: #1c1917; display: block; }
+  .dlg-dark .field-label { color: #f5f5f4; }
+  .field-label .opt { color: #78716c; font-weight: 400; margin-left: 4px; }
+
+  .select, .input, .textarea { width: 100%; padding: 8px 12px; background: #fff; border: 1px solid #e7e5e4; border-radius: 8px; font-size: 13px; color: #1c1917; font-family: inherit; box-sizing: border-box; }
+  .dlg-dark .select, .dlg-dark .input, .dlg-dark .textarea { background: #292524; border-color: #44403c; color: #f5f5f4; }
+  .textarea { resize: vertical; min-height: 56px; }
+  .select { display: inline-flex; align-items: center; justify-content: space-between; gap: 6px; cursor: pointer; }
+  .select .chev { color: #78716c; }
+  .select.placeholder { color: #a8a29e; }
+
+  /* Column config */
+  .cc-section { display: flex; flex-direction: column; gap: 6px; }
+  .cc-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e7e5e4; border-radius: 8px; overflow: hidden; table-layout: auto; }
+  .cc-table th:nth-child(1), .cc-table td:nth-child(1) { width: auto; }
+  .cc-table th:nth-child(2), .cc-table td:nth-child(2) { width: 30%; min-width: 160px; }
+  .cc-table th:nth-child(3), .cc-table td:nth-child(3) { width: 1%; white-space: nowrap; }
+  .type-cell { display: flex; flex-direction: column; gap: 4px; }
+  .type-sample { font-size: 11px; color: #78716c; font-family: ui-monospace, monospace; padding-left: 10px; }
+  .dlg-dark .type-sample { color: #a8a29e; }
+  .dlg-dark .cc-table { background: #292524; border-color: #44403c; }
+  .cc-table th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #78716c; font-weight: 600; background: #f9fafb; border-bottom: 1px solid #e7e5e4; }
+  .dlg-dark .cc-table th { background: #1c1917; color: #a8a29e; border-bottom-color: #44403c; }
+  .cc-table td { padding: 8px 12px; font-size: 13px; border-bottom: 1px solid #f0ede9; }
+  .dlg-dark .cc-table td { border-bottom-color: #363130; }
+  .cc-table tr:last-child td { border-bottom: 0; }
+  .cc-table .input { padding: 6px 10px; font-size: 12px; }
+  .cc-table .select { padding: 6px 10px; font-size: 12px; }
+  .cc-table .ignore-btn { padding: 4px 10px; background: transparent; border-radius: 6px; font-size: 12px; color: #78716c; cursor: pointer; border: 0; display: inline-flex; align-items: center; gap: 4px; }
+  .cc-table .ignore-btn:hover { background: #f5f5f4; color: #1c1917; }
+  .dlg-dark .cc-table .ignore-btn:hover { background: #44403c; color: #f5f5f4; }
+
+  /* Ignored columns accordion */
+  .ignored-section { border: 1px solid #e7e5e4; border-radius: 8px; background: rgba(120,113,108,0.04); }
+  .dlg-dark .ignored-section { border-color: #44403c; background: rgba(168,162,158,0.04); }
+  .ignored-toggle { width: 100%; display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 12px; color: #78716c; background: transparent; border: 0; cursor: pointer; text-align: left; }
+  .dlg-dark .ignored-toggle { color: #a8a29e; }
+
+  .dlg-foot { padding: 14px 22px; border-top: 1px solid #f0ede9; display: flex; justify-content: flex-end; gap: 8px; background: #fafaf9; }
+  .dlg-dark .dlg-foot { border-top-color: #44403c; background: #2c2826; }
+  .btn { padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 0; }
+  .btn-primary { background: #c2410c; color: #fff; }
+  .dlg-dark .btn-primary { background: #ea580c; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-outline { background: transparent; color: #1c1917; border: 1px solid #e7e5e4; }
+  .dlg-dark .btn-outline { color: #f5f5f4; border-color: #44403c; }
+
+  .icon-svg { width: 14px; height: 14px; }
+  .empty-ds { padding: 16px; background: rgba(120,113,108,0.06); border: 1px solid #e7e5e4; border-radius: 8px; text-align: center; font-size: 13px; color: #78716c; }
+  .dlg-dark .empty-ds { background: rgba(168,162,158,0.05); border-color: #44403c; color: #a8a29e; }
+
+  .two-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .state-wrap { border: 1px solid #e7e5e4; border-radius: 12px; overflow: hidden; }
+</style>
+
+<div class="ar">
+
+  <h3 style="font-family:'Iowan Old Style',Georgia,serif;font-size:18px;margin:8px 0 12px;">Light + Dark · data source preselected (from /datasources Create Report) · 1 ignored column open</h3>
+  <div class="two-modes" style="margin-bottom: 24px;">
+
+    <!-- LIGHT -->
+    <div class="state-wrap">
+      <div class="panel-label">Light</div>
+      <div class="stage">
+        <div class="dlg">
+          <div class="dlg-head">
+            <h2>Add Report</h2>
+            <p>Pick a data source, name your report, configure columns, then save.</p>
+          </div>
+          <div class="dlg-body">
+
+            <!-- Section 1: Data source -->
+            <div>
+              <label class="field-label">Data source</label>
+              <div class="select" style="margin-top:6px">
+                <span>Superstore 2024</span>
+                <svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+
+            <!-- Section 2: Name + Description -->
+            <div>
+              <label class="field-label">Name</label>
+              <input class="input" value="Sales by Region" style="margin-top:6px" />
+            </div>
+            <div>
+              <label class="field-label">Description <span class="opt">(optional)</span></label>
+              <textarea class="textarea" placeholder="What is this report for?" style="margin-top:6px">Q3 overview by territory</textarea>
+            </div>
+
+            <!-- Section 3: Column config -->
+            <div class="cc-section">
+              <label class="field-label">Columns</label>
+              <table class="cc-table">
+                <thead><tr><th>Name</th><th>Type</th><th style="text-align:right">Action</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><input class="input" value="Order Date" /></td>
+                    <td><div class="type-cell"><div class="select"><span>Date</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div><span class="type-sample">e.g. 2024-03-15</span></div></td>
+                    <td style="text-align:right">
+                      <button class="ignore-btn">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                        Ignore
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input class="input" value="Sales ($)" /></td>
+                    <td><div class="type-cell"><div class="select"><span>Number</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div><span class="type-sample">e.g. $1,234.50</span></div></td>
+                    <td style="text-align:right"><button class="ignore-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Ignore</button></td>
+                  </tr>
+                  <tr>
+                    <td><input class="input" value="Region" /></td>
+                    <td><div class="type-cell"><div class="select"><span>Category</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div><span class="type-sample">e.g. West</span></div></td>
+                    <td style="text-align:right"><button class="ignore-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Ignore</button></td>
+                  </tr>
+                  <tr>
+                    <td><input class="input" value="Category" /></td>
+                    <td><div class="type-cell"><div class="select"><span>Category</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div><span class="type-sample">e.g. Furniture</span></div></td>
+                    <td style="text-align:right"><button class="ignore-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Ignore</button></td>
+                  </tr>
+                  <tr>
+                    <td><input class="input" value="Customer Name" /></td>
+                    <td><div class="type-cell"><div class="select"><span>Text</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div><span class="type-sample">e.g. Claire Gute</span></div></td>
+                    <td style="text-align:right"><button class="ignore-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Ignore</button></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Ignored section closed by default -->
+              <div class="ignored-section" style="margin-top: 6px;">
+                <button class="ignored-toggle">
+                  <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"/></svg>
+                  Ignored columns (1)
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="dlg-foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary">Save report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DARK -->
+    <div class="state-wrap">
+      <div class="panel-label">Dark</div>
+      <div class="stage stage-dark">
+        <div class="dlg dlg-dark">
+          <div class="dlg-head">
+            <h2>Add Report</h2>
+            <p>Pick a data source, name your report, configure columns, then save.</p>
+          </div>
+          <div class="dlg-body">
+
+            <div>
+              <label class="field-label">Data source</label>
+              <div class="select" style="margin-top:6px">
+                <span>Superstore 2024</span>
+                <svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+
+            <div>
+              <label class="field-label">Name</label>
+              <input class="input" value="Sales by Region" style="margin-top:6px" />
+            </div>
+            <div>
+              <label class="field-label">Description <span class="opt">(optional)</span></label>
+              <textarea class="textarea" style="margin-top:6px">Q3 overview by territory</textarea>
+            </div>
+
+            <div class="cc-section">
+              <label class="field-label">Columns</label>
+              <table class="cc-table">
+                <thead><tr><th>Name</th><th>Type</th><th style="text-align:right">Action</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><input class="input" value="Order Date" /></td>
+                    <td><div class="select"><span>Date</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div></td>
+                    <td style="text-align:right"><button class="ignore-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Ignore</button></td>
+                  </tr>
+                  <tr>
+                    <td><input class="input" value="Sales ($)" /></td>
+                    <td><div class="select"><span>Number</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div></td>
+                    <td style="text-align:right"><button class="ignore-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Ignore</button></td>
+                  </tr>
+                  <tr>
+                    <td><input class="input" value="Region" /></td>
+                    <td><div class="select"><span>Text</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div></td>
+                    <td style="text-align:right"><button class="ignore-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Ignore</button></td>
+                  </tr>
+                  <tr>
+                    <td><input class="input" value="Category" /></td>
+                    <td><div class="select"><span>Text</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div></td>
+                    <td style="text-align:right"><button class="ignore-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>Ignore</button></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="ignored-section" style="margin-top: 6px;">
+                <button class="ignored-toggle">
+                  <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
+                  Ignored columns (1)
+                </button>
+                <table class="cc-table" style="border-radius: 0; border-left: 0; border-right: 0; border-bottom: 0;">
+                  <tbody>
+                    <tr style="opacity: 0.7;">
+                      <td><input class="input" value="Customer ID" /></td>
+                      <td><div class="select"><span>Text</span><svg class="chev icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></div></td>
+                      <td style="text-align:right">
+                        <button class="ignore-btn" style="color:#fb923c">
+                          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          Restore
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="dlg-foot">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary">Save report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Empty-data-sources state -->
+  <h3 style="font-family:'Iowan Old Style',Georgia,serif;font-size:18px;margin:8px 0 12px;">Edge case: no data sources yet (light only)</h3>
+  <div class="state-wrap" style="margin-bottom: 18px;">
+    <div class="panel-label">Empty / no data sources</div>
+    <div class="stage" style="min-height: 320px;">
+      <div class="dlg">
+        <div class="dlg-head">
+          <h2>Add Report</h2>
+          <p>Pick a data source, name your report, configure columns, then save.</p>
+        </div>
+        <div class="dlg-body">
+          <div class="empty-ds">
+            You have no data sources. <a href="#" style="color:#c2410c;text-decoration:underline">Add one from the Data Sources page</a> first.
+          </div>
+        </div>
+        <div class="dlg-foot">
+          <button class="btn btn-outline">Cancel</button>
+          <button class="btn btn-primary" disabled>Save report</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 14px 18px; background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; font-size: 13px; color: #1c1917;">
+    <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:15px">Anatomy</strong>
+    <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.7;">
+      <li><strong>Dialog:</strong> max-width 720px (wider than upload dialog because of the column table). Vertical scroll when content overflows. L3 elevation.</li>
+      <li><strong>Section 1 — Data source:</strong> dropdown of existing data sources. Pre-selected if coming from /datasources "Create Report". No inline upload (deferred to V2).</li>
+      <li><strong>Section 2 — Name + Description:</strong> single-line text input + multi-line textarea (optional). Save disabled until both Name and Data source are set.</li>
+      <li><strong>Section 3 — Columns:</strong> compact table with Name input (rename), Type select (Text/Number/Date — system-inferred default, user can override), Ignore action right-aligned.</li>
+      <li><strong>Ignored columns section:</strong> expandable accordion at bottom. Click to reveal ignored columns; each has a Restore action. Closed by default; auto-expanded if there are ignored columns (or kept closed — open question below).</li>
+      <li><strong>Empty data-source state:</strong> If user has zero data sources, dialog shows a hint linking to /datasources. Save remains disabled.</li>
+      <li><strong>Footer:</strong> Cancel (outline) + Save report (primary). On save → dialog closes → routes to /reports/:newId.</li>
+    </ul>
+  </div>
+
+  <div style="padding: 14px 18px; background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px; font-size: 13px; color: #1c1917; margin-top: 12px;">
+    <strong style="font-family:'Iowan Old Style',Georgia,serif;font-size:15px">Open questions</strong>
+    <ul style="margin: 8px 0 0; padding-left: 20px; line-height: 1.7;">
+      <li>"Ignored columns" section: open by default, or closed?</li>
+      <li>Column type dropdown labels: "Text · Number · Date" (current) or "Categorical · Numeric · Temporal" (more accurate)? Recommend Text/Number/Date — matches whitepaper §4.</li>
+      <li>Should we show a small sample value beside the Type select to help users confirm the type? e.g., "Date · sample: 2024-03-15"?</li>
+      <li>Action column width feels OK at 120px — confirm or wider?</li>
+    </ul>
+  </div>
+
+</div>

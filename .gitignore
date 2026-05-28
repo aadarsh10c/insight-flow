@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.vite/
+.vercel/
+coverage/
+*.local
+.DS_Store
+.env
+.env.*
+!.env.example
+.superpowers/

@@ -1,0 +1,124 @@
+<h2>InsightFlow v3 — Multi-Document Architecture</h2>
+<p class="subtitle">Five routes, three dialogs. Each box = a real URL. Arrows show user flow. Dotted = dialog overlay (no route change).</p>
+
+<style>
+  .flow { font-family: ui-sans-serif, system-ui, sans-serif; }
+  .flow .lane { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px; }
+  .flow .node { background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; padding: 14px; font-size: 13px; min-height: 100px; }
+  .flow .node.home { background: linear-gradient(135deg,#fff7ed 0%, #fdfbf7 100%); border-color: #fdba74; }
+  .flow .node.dialog { background: #fff7ed; border: 1px dashed #c2410c; }
+  .flow .url { font-family: ui-monospace, monospace; font-size: 11px; color: #c2410c; margin-bottom: 4px; }
+  .flow .nm { font-family: 'Iowan Old Style', Georgia, serif; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .flow .dc { font-size: 12px; color: #78716c; line-height: 1.4; }
+  .flow .lane-title { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #78716c; margin-bottom: 8px; }
+
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-family: ui-monospace, monospace; background: #f5f5f4; color: #57534e; margin-right: 4px; }
+  .pill.acc { background: #fff7ed; color: #c2410c; }
+
+  .arrow-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: center; text-align: center; font-size: 18px; color: #c2410c; margin: -8px 0 4px; }
+
+  .container { background: #fff; border: 1px solid #e7e5e4; border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+
+  .legend { display: flex; gap: 18px; padding: 12px 14px; background: #fdfbf7; border: 1px solid #e7e5e4; border-radius: 8px; font-size: 12px; margin-bottom: 18px; }
+  .legend .key { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 14px; height: 14px; border-radius: 3px; }
+</style>
+
+<div class="flow">
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="key"><div class="swatch" style="background:#fff;border:1px solid #e7e5e4"></div> Route (URL)</div>
+    <div class="key"><div class="swatch" style="background:#fff7ed;border:1px dashed #c2410c"></div> Dialog (overlay)</div>
+    <div class="key"><div class="swatch" style="background:#fff7ed;border:1px solid #fdba74"></div> Home / branded</div>
+  </div>
+
+  <!-- ROUTES -->
+  <div class="container">
+    <div class="lane-title">Routes</div>
+    <div class="lane">
+      <div class="node home">
+        <div class="url">/</div>
+        <div class="nm">Home</div>
+        <div class="dc">Branded landing. Logo, headline, one-paragraph description, CTA → Data Sources. Marketing-style layout (own personality, same tokens).</div>
+      </div>
+      <div class="node">
+        <div class="url">/datasources</div>
+        <div class="nm">Data Sources</div>
+        <div class="dc">Table of all uploaded files: name · type · uploaded date · rows. Click row → preview. "+ Add data source" button → upload dialog.</div>
+      </div>
+      <div class="node">
+        <div class="url">/reports</div>
+        <div class="nm">Reports</div>
+        <div class="dc">List of all reports: name · data source · created. "+ Add Report" button → Add Report dialog. Click row → report detail.</div>
+      </div>
+      <div class="node">
+        <div class="url">/reports/:id</div>
+        <div class="nm">Report Detail</div>
+        <div class="dc">Header: report name + description. Canvas: one chart widget. "Add Widget" button → Chart Builder dialog (existing spec).</div>
+      </div>
+      <div class="node">
+        <div class="url">/styleguide</div>
+        <div class="nm">Style Guide</div>
+        <div class="dc">Read-only — every token, scale, rule rendered live. Tooling, not user flow.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIALOGS -->
+  <div class="container">
+    <div class="lane-title">Dialogs (overlay — no route change)</div>
+    <div class="lane" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="node dialog">
+        <span class="pill acc">from /datasources</span>
+        <div class="nm" style="margin-top:6px">Upload Dialog</div>
+        <div class="dc">Drop zone · accepts CSV/Excel · parses with PapaParse/SheetJS · system-inferred types only (no editing here). On save → data source added to list.</div>
+      </div>
+      <div class="node dialog">
+        <span class="pill acc">from /reports</span>
+        <div class="nm" style="margin-top:6px">Add Report Dialog</div>
+        <div class="dc">Step 1: pick a data source (or "+ upload new" → opens Upload Dialog inline)<br>Step 2: name + description<br>Step 3: column config (type overrides, renames, ignore toggles) — <em>scoped to this report</em><br>Save → routes to /reports/:newId</div>
+      </div>
+      <div class="node dialog">
+        <span class="pill acc">from /reports/:id</span>
+        <div class="nm" style="margin-top:6px">Chart Builder Dialog</div>
+        <div class="dc">The existing 4-step stepper from the whitepaper. Unchanged from the v2 spec. Save → chart appears on report detail.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HAPPY PATH -->
+  <div class="container">
+    <div class="lane-title">Happy path (first-time user)</div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px; align-items: center; color: #1c1917;">
+      <span class="pill">/ Home</span>
+      <span style="color:#c2410c">→</span>
+      <span class="pill">/datasources</span>
+      <span style="color:#c2410c">→</span>
+      <span class="pill" style="background:#fff7ed;color:#c2410c">Upload Dialog</span>
+      <span style="color:#c2410c">→</span>
+      <span class="pill">/reports</span>
+      <span style="color:#c2410c">→</span>
+      <span class="pill" style="background:#fff7ed;color:#c2410c">Add Report Dialog</span>
+      <span style="color:#c2410c">→</span>
+      <span class="pill">/reports/:id</span>
+      <span style="color:#c2410c">→</span>
+      <span class="pill" style="background:#fff7ed;color:#c2410c">Chart Builder Dialog</span>
+      <span style="color:#c2410c">→</span>
+      <span class="pill">Chart on canvas</span>
+    </div>
+  </div>
+
+  <!-- KEY DECISIONS REMAINING -->
+  <div class="container" style="background:#fff7ed; border:1px solid #fdba74;">
+    <div class="lane-title" style="color:#9a3412">Open decisions before whitepaper rewrite</div>
+    <ol style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.7; color: #1c1917;">
+      <li><strong>Charts per report:</strong> ✅ one (locked)</li>
+      <li><strong>Column config location:</strong> data source has system-inferred types only · per-report overrides for type/rename/ignore — or both layers?</li>
+      <li><strong>Branding scope:</strong> same tokens with different layout/feel — or fully bespoke style (separate fonts, colors)?</li>
+      <li><strong>Cross-references:</strong> can a data source be deleted if reports depend on it? Block, or cascade-delete reports?</li>
+      <li><strong>"Try with sample data":</strong> still on the Upload Dialog (creates sample data source), or a separate "+ Add sample data source" affordance on /datasources?</li>
+    </ol>
+  </div>
+
+</div>

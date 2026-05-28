@@ -10,8 +10,7 @@ export const useHomePage = (_params?: UseHomePageParams): HomePageView => {
   const [isSeeding, setIsSeeding] = useState(false)
 
   const handleGetStarted = useCallback(() => {
-    // Forward reference: /datasources route is created in Phase 03
-    navigate({ to: '/datasources' as never })
+    navigate({ to: '/datasources' })
   }, [navigate])
 
   const handleTrySampleData = useCallback(async () => {
@@ -19,8 +18,7 @@ export const useHomePage = (_params?: UseHomePageParams): HomePageView => {
     try {
       const { seedSampleDataSource } = await import('@/lib/sample-data/seed')
       await seedSampleDataSource()
-      // Forward reference: /datasources route is created in Phase 03
-    navigate({ to: '/datasources' as never })
+      navigate({ to: '/datasources' })
     } catch (err) {
       showToast({
         variant: 'destructive',

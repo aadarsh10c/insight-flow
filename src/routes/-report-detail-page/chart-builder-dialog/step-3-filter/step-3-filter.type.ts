@@ -8,6 +8,7 @@ export type Step3FilterProps = {
   rows: ReadonlyArray<RowData>
   partitioned: PartitionedColumns
   columnConfig: ColumnConfigMap
+  chartColumns: ReadonlyArray<string>
   value: FilterClause[]
   onChange: (next: FilterClause[]) => void
 }

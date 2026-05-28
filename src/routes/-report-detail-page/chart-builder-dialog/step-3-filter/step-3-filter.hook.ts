@@ -5,17 +5,17 @@ import type { FilterableColumn } from '@/components/shared/filter-row'
 import type { Step3FilterProps, Step3View } from './step-3-filter.type'
 
 export const useStep3Filter = (props: Step3FilterProps): Step3View => {
-  const { rows, partitioned, columnConfig, value, onChange } = props
+  const { rows, partitioned, columnConfig, chartColumns, value, onChange } = props
 
-  const filterableColumns = useMemo<FilterableColumn[]>(
-    () => [
+  const filterableColumns = useMemo<FilterableColumn[]>(() => {
+    const usedByChart = new Set(chartColumns)
+    return [
       ...partitioned.category.map((n) => ({ name: n, type: 'category' as const })),
       ...partitioned.text.map((n) => ({ name: n, type: 'text' as const })),
       ...partitioned.numeric.map((n) => ({ name: n, type: 'number' as const })),
       ...partitioned.temporal.map((n) => ({ name: n, type: 'date' as const })),
-    ],
-    [partitioned]
-  )
+    ].filter((c) => !usedByChart.has(c.name))
+  }, [partitioned, chartColumns])
 
   const labelFor = useCallback(
     (c: string) => columnConfig[c]?.label ?? c,

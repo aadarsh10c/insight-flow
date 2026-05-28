@@ -2,11 +2,11 @@ import {
   Dialog,
   DialogBody,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { RotateCcw } from 'lucide-react'
 import { StepCard } from '@/components/shared/step-card'
 import { Step1ChartType } from './step-1-chart-type'
 import { Step2Data } from './step-2-data'
@@ -23,20 +23,10 @@ export const ChartBuilderDialog = (props: ChartBuilderDialogProps) => {
   return (
     <Dialog open={props.open} onOpenChange={(o) => !o && view.handleClose()}>
       <DialogContent className="h-[90vh] !max-h-[90vh] w-[90vw] !max-w-[90vw] p-0">
-        <DialogHeader className="flex flex-row items-center justify-between gap-2">
-          <DialogTitle className="text-title">Create Chart</DialogTitle>
-          <div className="flex gap-2">
-            <Button variant="ghost" size="sm" onClick={view.handleResetAll}>
-              <RotateCcw className="mr-1.5 h-3.5 w-3.5" aria-hidden />
-              Reset All
-            </Button>
-            <Button variant="outline" size="sm" onClick={view.handleClose}>
-              Cancel
-            </Button>
-            <Button size="sm" onClick={view.handleSave} disabled={!state.canSave}>
-              Save Chart
-            </Button>
-          </div>
+        <DialogHeader>
+          <DialogTitle className="text-title">
+            {view.isEditMode ? 'Edit Chart' : 'Create Chart'}
+          </DialogTitle>
         </DialogHeader>
 
         <DialogBody className="!p-0">
@@ -90,6 +80,7 @@ export const ChartBuilderDialog = (props: ChartBuilderDialogProps) => {
                   rows={props.dataSource.rows}
                   partitioned={view.partitioned}
                   columnConfig={props.report.columnConfig}
+                  chartColumns={view.chartColumns}
                   value={state.steps[3].value}
                   onChange={view.handleFilterChange}
                 />
@@ -124,6 +115,15 @@ export const ChartBuilderDialog = (props: ChartBuilderDialogProps) => {
             </div>
           </div>
         </DialogBody>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={view.handleClose}>
+            Cancel
+          </Button>
+          <Button onClick={view.handleSave} disabled={!state.canSave}>
+            {view.isEditMode ? 'Save Changes' : 'Save Chart'}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

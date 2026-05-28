@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useReducer, useState } from 'react'
 import { useReportsStore } from '@/stores/reports.store'
-import { useToastStore } from '@/stores/toast.store'
 import { initialState, reducer } from './chart-builder-reducer'
 import { buildSummary, partitionColumns, uniqueValuesOf } from './chart-builder-dialog.utils'
 import type {
@@ -50,11 +49,15 @@ export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
   const [restoredNote, setRestoredNote] = useState<string | null>(null)
   const setChart = useReportsStore((s) => s.setChart)
   const updateReport = useReportsStore((s) => s.update)
-  const showToast = useToastStore((s) => s.show)
 
   // Sync on (re-)open: hydrate from existing chart + auto-restore any ignored columns.
   // Compute-during-render is safe because we update state only when key changes.
+  // When the dialog closes, clear loadedKey so the next open always re-hydrates
+  // from the persisted chart (discards in-progress edits the user didn't save).
   const syncKey = `${open ? '1' : '0'}|${report.id}|${report.chart ? 'with' : 'none'}`
+  if (!open && loadedKey !== '') {
+    setLoadedKey('')
+  }
   if (open && syncKey !== loadedKey) {
     if (report.chart) {
       // Auto-restore any ignored columns referenced by the chart
@@ -123,19 +126,6 @@ export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
     []
   )
 
-  const handleResetAll = useCallback(() => {
-    dispatch({ type: 'RESET_ALL' })
-    showToast({
-      variant: 'default',
-      title: 'Reset',
-      description: 'All steps cleared.',
-      durationMs: 5000,
-      action: {
-        label: 'Undo',
-        handler: () => dispatch({ type: 'RESTORE_FROM_SNAPSHOT' }),
-      },
-    })
-  }, [showToast])
 
   const handleBucketChange = useCallback(
     (bucket: TimeBucket) => {
@@ -197,12 +187,22 @@ export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
     return labelFor(c.measureColumn)
   }, [state.steps, labelFor])
 
+  const chartColumns = useMemo<ReadonlyArray<string>>(() => {
+    const c = state.steps[2].value
+    if (c === null) return []
+    if (c.type === 'bar') return [c.measureColumn, c.groupColumn].filter((s) => s !== '')
+    if (c.type === 'pie') return [c.measureColumn, c.splitColumn].filter((s) => s !== '')
+    return [c.measureColumn, c.dateColumn].filter((s) => s !== '')
+  }, [state.steps])
+
   return {
     state,
     partitioned,
     hasPieEligibleColumn,
+    isEditMode: report.chart !== undefined,
     defaultTitle: buildDefaultTitle(state.steps[2].value, labelFor),
     defaultLegendName,
+    chartColumns,
     previewChart,
     summaries: { ...summaries, step2: step2Summary ?? summaries.step2 },
     labelFor,
@@ -213,7 +213,6 @@ export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
     handleStyleChange,
     handleGoToStep,
     handleBucketChange,
-    handleResetAll,
     handleDismissRestoredNote,
     handleSave,
     handleClose: onClose,

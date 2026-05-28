@@ -1,4 +1,5 @@
 import { Sidebar } from './sidebar'
+import { ToastHost } from './toast-host'
 import { useShell } from './shell.hook'
 import type { ShellProps } from './shell.type'
 
@@ -16,6 +17,7 @@ export const Shell = (props: ShellProps) => {
         </a>
         {view.children}
       </main>
+      <ToastHost />
     </div>
   )
 }

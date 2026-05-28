@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useReducer, useRef, useState } from 'react'
+import { useCallback, useMemo, useReducer, useState } from 'react'
 import { useReportsStore } from '@/stores/reports.store'
 import { useToastStore } from '@/stores/toast.store'
 import { initialState, reducer } from './chart-builder-reducer'
@@ -27,28 +27,65 @@ const buildDefaultTitle = (
   return `${labelFor(config.measureColumn)} over time`
 }
 
+const collectChartColumns = (chart: NonNullable<ChartConfig>): Set<string> => {
+  const set = new Set<string>()
+  const c = chart.config
+  if (c.type === 'bar') {
+    set.add(c.measureColumn)
+    set.add(c.groupColumn)
+  } else if (c.type === 'pie') {
+    set.add(c.measureColumn)
+    set.add(c.splitColumn)
+  } else {
+    set.add(c.measureColumn)
+    set.add(c.dateColumn)
+  }
+  return set
+}
+
 export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
   const { open, report, dataSource, onClose } = props
   const [state, dispatch] = useReducer(reducer, undefined, initialState)
   const [loadedKey, setLoadedKey] = useState<string>('')
+  const [restoredNote, setRestoredNote] = useState<string | null>(null)
   const setChart = useReportsStore((s) => s.setChart)
+  const updateReport = useReportsStore((s) => s.update)
   const showToast = useToastStore((s) => s.show)
 
-  // Sync on (re-)open: hydrate from existing chart, or reset to initial.
-  // Compute-during-render (no useEffect, no cascading renders).
+  // Sync on (re-)open: hydrate from existing chart + auto-restore any ignored columns.
+  // Compute-during-render is safe because we update state only when key changes.
   const syncKey = `${open ? '1' : '0'}|${report.id}|${report.chart ? 'with' : 'none'}`
   if (open && syncKey !== loadedKey) {
     if (report.chart) {
+      // Auto-restore any ignored columns referenced by the chart
+      const used = collectChartColumns(report.chart)
+      const restored: string[] = []
+      const newConfig = { ...report.columnConfig }
+      for (const col of used) {
+        if (newConfig[col]?.ignored === true) {
+          newConfig[col] = { ...newConfig[col], ignored: false }
+          restored.push(col)
+        }
+      }
+      if (restored.length > 0) {
+        updateReport(report.id, { columnConfig: newConfig })
+        setRestoredNote(
+          `Column${restored.length > 1 ? 's' : ''} '${restored.join("', '")}' ${restored.length > 1 ? 'were' : 'was'} restored because this chart needs ${restored.length > 1 ? 'them' : 'it'}.`
+        )
+      } else {
+        setRestoredNote(null)
+      }
       dispatch({ type: 'LOAD_FROM_CHART_CONFIG', value: report.chart })
     } else {
-      // Reset to initialState by dispatching RESET_ALL and discarding snapshot
+      setRestoredNote(null)
       dispatch({ type: 'RESET_ALL' })
       dispatch({ type: 'RESTORE_FROM_SNAPSHOT' })
-      // ^ no-op if no prior snapshot; ensures a fresh tree state
       dispatch({ type: 'RESET_ALL' })
     }
     setLoadedKey(syncKey)
   }
+
+  const handleDismissRestoredNote = useCallback(() => setRestoredNote(null), [])
 
   const partitioned = useMemo(
     () => partitionColumns(dataSource.columns, report.columnConfig),
@@ -100,27 +137,17 @@ export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
     })
   }, [showToast])
 
-  const handleBucketChange = useCallback((bucket: TimeBucket) => {
-    // The current step 2 value is a LineConfig — update its bucket directly without
-    // dropping back to 'reset' state by dispatching SET_DATA again with same fields + new bucket.
-    // Read current state via getter pattern in dispatch by passing a thunk... simpler: dispatch SET_DATA.
-    // We need the current data to copy; use a re-entrant lookup via dispatchedClosure pattern.
-    // Workaround: use a local ref-style read via lastDispatched is overkill — call dispatch with
-    // a new SET_DATA based on assumption we're in a line state. The reducer accepts the new value.
-    // Caller (ChartPreview) only passes a bucket when current is a line, so this is safe.
-    dispatch({
-      type: 'SET_DATA',
-      value: (() => {
-        const cur = stateRef.current.steps[2].value
-        if (cur === null || cur.type !== 'line')
-          return { type: 'line', measureColumn: '', dateColumn: '', bucket }
-        return { ...cur, bucket }
-      })(),
-    })
-  }, [])
-
-  // Mutable ref to current state for handlers that need to read latest without re-creating
-  const stateRef = useStateRef(state)
+  const handleBucketChange = useCallback(
+    (bucket: TimeBucket) => {
+      const cur = state.steps[2].value
+      const next =
+        cur !== null && cur.type === 'line'
+          ? { ...cur, bucket }
+          : { type: 'line' as const, measureColumn: '', dateColumn: '', bucket }
+      dispatch({ type: 'SET_DATA', value: next })
+    },
+    [state.steps]
+  )
 
   const handleSave = useCallback(() => {
     if (!state.canSave || state.steps[2].value === null) return
@@ -172,6 +199,7 @@ export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
     previewChart,
     summaries: { ...summaries, step2: step2Summary ?? summaries.step2 },
     labelFor,
+    restoredNote,
     handleChartTypeChange,
     handleDataChange,
     handleFilterChange,
@@ -179,15 +207,9 @@ export const useChartBuilderDialog = (props: ChartBuilderDialogProps) => {
     handleGoToStep,
     handleBucketChange,
     handleResetAll,
+    handleDismissRestoredNote,
     handleSave,
     handleClose: onClose,
   }
 }
 
-// Tiny ref-state helper — keeps a mutable .current that stays in sync with state.
-// Used so callbacks reading latest state don't have to depend on it and re-create.
-const useStateRef = <T>(value: T) => {
-  const ref = useRef(value)
-  ref.current = value
-  return ref
-}

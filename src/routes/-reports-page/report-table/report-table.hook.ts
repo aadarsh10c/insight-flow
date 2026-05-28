@@ -48,9 +48,7 @@ export const useReportTable = (): ReportTableView => {
   const handleSearchChange = useCallback((v: string) => setSearch(v), [])
 
   const handleOpenReport = useCallback(
-    (id: ReportId) =>
-      // Forward reference: /reports/:reportId route is Phase 05
-      navigate({ to: '/reports/$reportId' as never, params: { reportId: id } as never }),
+    (id: ReportId) => navigate({ to: '/reports/$reportId', params: { reportId: id } }),
     [navigate]
   )
 

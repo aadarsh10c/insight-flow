@@ -74,7 +74,7 @@ export const useChartPreview = (props: ChartPreviewProps): ChartPreviewView => {
       showlegend: style.legend ?? true,
     }
 
-    let plotData: unknown[] = []
+    let plotData: unknown[]
     let title = style.title ?? ''
     let periodDropdown: PeriodDropdownView | null = null
 

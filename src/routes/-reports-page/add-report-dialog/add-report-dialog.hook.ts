@@ -62,8 +62,7 @@ export const useAddReportDialog = (
       setColumnConfig({})
       setSelectedDataSourceId(null)
       onClose()
-      // Forward reference: /reports/:reportId route is Phase 05
-      navigate({ to: '/reports/$reportId' as never, params: { reportId: report.id } as never })
+      navigate({ to: '/reports/$reportId', params: { reportId: report.id } })
     } finally {
       setIsSubmitting(false)
     }

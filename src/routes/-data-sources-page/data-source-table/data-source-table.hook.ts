@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { useDataSourcesList, useMostRecentDataSourceId } from '@/stores/data-sources.store'
+import {
+  useDataSourcesList,
+  useDataSourcesStore,
+  useMostRecentDataSourceId,
+} from '@/stores/data-sources.store'
 import { formatBytes, formatRelativeTime } from '@/lib/utils/format'
 import type { DataSourceId } from '@/types/data-source.type'
 import type {
@@ -16,10 +20,19 @@ export const useDataSourceTable = (_params?: UseDataSourceTableParams): DataSour
   const mostRecentId = useMostRecentDataSourceId()
   const navigate = useNavigate()
   const [now, setNow] = useState(() => Date.now())
+  const [hasHydrated, setHasHydrated] = useState(() =>
+    useDataSourcesStore.persist.hasHydrated()
+  )
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), 30_000)
     return () => window.clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    setHasHydrated(useDataSourcesStore.persist.hasHydrated())
+    const unsub = useDataSourcesStore.persist.onFinishHydration(() => setHasHydrated(true))
+    return () => unsub()
   }, [])
 
   const enrichedItems = useMemo<EnrichedDataSource[]>(
@@ -46,6 +59,7 @@ export const useDataSourceTable = (_params?: UseDataSourceTableParams): DataSour
   return {
     enrichedItems,
     isEmpty: enrichedItems.length === 0,
+    isHydrating: !hasHydrated,
     handleCreateReport,
   }
 }

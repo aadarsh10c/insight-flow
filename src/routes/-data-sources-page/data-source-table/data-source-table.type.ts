@@ -14,5 +14,6 @@ export type UseDataSourceTableParams = DataSourceTableProps
 export type DataSourceTableView = {
   enrichedItems: ReadonlyArray<EnrichedDataSource>
   isEmpty: boolean
+  isHydrating: boolean
   handleCreateReport: (id: DataSourceId) => void
 }

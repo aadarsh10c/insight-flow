@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { ColumnSchema, DataSource, DataSourceId, RowData } from '@/types/data-source.type'
 import { asDataSourceId, newId } from '@/lib/ids'
+import { idbStorage } from '@/lib/idb-storage'
 
 type AddInput = {
   name: string
@@ -36,7 +37,7 @@ export const useDataSourcesStore = create<DataSourcesState & DataSourcesActions>
         return ds
       },
     }),
-    { name: 'insightflow:dataSources', storage: createJSONStorage(() => localStorage) }
+    { name: 'insightflow:dataSources', storage: createJSONStorage(() => idbStorage) }
   )
 )
 

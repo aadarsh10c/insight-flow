@@ -9,11 +9,45 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
 import { useDataSourceTable } from './data-source-table.hook'
 import type { DataSourceTableProps } from './data-source-table.type'
 
+const SKELETON_ROWS = [0, 1, 2]
+
 export const DataSourceTable = (props: DataSourceTableProps) => {
   const view = useDataSourceTable(props)
+
+  if (view.isHydrating) {
+    return (
+      <div className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Size</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Uploaded</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {SKELETON_ROWS.map((i) => (
+              <TableRow key={i}>
+                <TableCell><Skeleton className="h-4 w-40" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-16" /></TableCell>
+                <TableCell><Skeleton className="h-5 w-12" /></TableCell>
+                <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                <TableCell className="text-right">
+                  <Skeleton className="ml-auto h-7 w-28" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    )
+  }
 
   if (view.isEmpty) {
     return (

@@ -14,7 +14,8 @@
       "Bash(npm install *)",
       "Bash(npm run *)",
       "Bash(rm -f src/main.js vite.config.js vite.config.d.ts tsconfig.tsbuildinfo tsconfig.node.tsbuildinfo)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(npm test *)"
     ]
   }
 }

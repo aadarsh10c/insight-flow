@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react'
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -28,7 +29,7 @@ export const AddReportDialog = (props: AddReportDialogProps) => {
 
   return (
     <Dialog open={props.open} onOpenChange={(o) => !o && view.handleClose()}>
-      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="font-serif">Add Report</DialogTitle>
           <DialogDescription>
@@ -36,6 +37,7 @@ export const AddReportDialog = (props: AddReportDialogProps) => {
           </DialogDescription>
         </DialogHeader>
 
+        <DialogBody>
         {view.isEmpty ? (
           <div className="rounded-md border border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
             {view.emptyMessage}
@@ -99,6 +101,7 @@ export const AddReportDialog = (props: AddReportDialogProps) => {
             )}
           </div>
         )}
+        </DialogBody>
 
         <DialogFooter>
           <Button variant="outline" onClick={view.handleClose} disabled={view.isSubmitting}>

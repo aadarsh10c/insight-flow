@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react'
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -34,7 +35,7 @@ export const UploadDataSourceDialog = (props: UploadDataSourceDialogProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <DialogBody className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="file">File</Label>
             {view.file === null ? (
@@ -76,7 +77,7 @@ export const UploadDataSourceDialog = (props: UploadDataSourceDialogProps) => {
             />
             {view.nameError && <p className="text-sm text-destructive">{view.nameError}</p>}
           </div>
-        </div>
+        </DialogBody>
 
         <DialogFooter>
           <Button variant="outline" onClick={view.handleClose} disabled={view.isSubmitting}>

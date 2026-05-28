@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogBody,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -19,6 +20,7 @@ export const ConfirmDialog = (props: ConfirmDialogProps) => {
           <DialogTitle>{view.title}</DialogTitle>
           <DialogDescription>{view.description}</DialogDescription>
         </DialogHeader>
+        <DialogBody />
         <DialogFooter>
           <Button variant="outline" onClick={view.handleCancel}>
             {view.cancelLabel}

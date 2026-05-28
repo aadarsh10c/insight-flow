@@ -177,16 +177,36 @@ One library, one stroke, one tone.
 
 ## 10. Focus rings (keyboard accessibility)
 
+Two distinct patterns — solid elements get an **outer ring with offset**, inputs get a **border swap + inset glow**. Mixing them up creates the "focus ring floating away from the input with a visible gap" bug.
+
 Always `focus-visible` — never on mouse click.
 
-**Solid elements (buttons, links):**
-- `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`
+### Pattern 1 — Buttons / links / solid clickable surfaces
 
-**Input fields:**
-- Border swaps to `--accent`
-- Adds soft outer glow: `focus-visible:ring-3 focus-visible:ring-accent/20`
+The element has its own clear visual surface (background fill or border). The focus ring sits **outside** the element with a 2px offset gap, drawn against the page background:
 
-Never disable focus rings. Never hide them with `outline: none` alone — only when paired with the `focus-visible:ring-*` replacement above.
+```
+focus-visible:outline-none
+focus-visible:ring-2 focus-visible:ring-ring
+focus-visible:ring-offset-2 focus-visible:ring-offset-background
+```
+
+**Why offset:** the button already has a clear edge. The ring needs to sit *outside* that edge to be visible. A 2px offset draws the ring on the page background so it doesn't visually merge with the button's surface.
+
+### Pattern 2 — Inputs / textareas / select triggers
+
+The element has a thin border that's the only visual edge. **Do NOT offset the ring — it creates a visible gap between the input border and the ring (looks broken).** Instead: swap the border color to accent and add an inset soft glow.
+
+```
+transition-colors duration-150 ease-out
+focus-visible:outline-none
+focus-visible:border-accent
+focus-visible:ring-2 focus-visible:ring-accent/20
+```
+
+**Why no offset:** the input has only a border (no background fill visible). An outer offset ring with a gap looks like the input is broken or the ring is floating. Border-swap is the canonical input-focus pattern — the border itself changes color to communicate focus, and a soft glow at 20% accent reinforces it without competing.
+
+**Rules:** never disable focus rings. Never hide them with `outline: none` alone — only when paired with one of the `focus-visible:ring-*` replacements above. Differentiating button vs input pattern is non-negotiable.
 
 ---
 

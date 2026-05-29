@@ -4,7 +4,6 @@ import {
   FileText,
   Home,
   Moon,
-  Palette,
   PanelLeftClose,
   PanelLeftOpen,
   Sun,
@@ -20,7 +19,6 @@ const ICONS: Record<SidebarIconKey, LucideIcon> = {
   home: Home,
   database: Database,
   'file-text': FileText,
-  palette: Palette,
 }
 
 const THEME_ICONS: Record<ThemeMode, LucideIcon> = {

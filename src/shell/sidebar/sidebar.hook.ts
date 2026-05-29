@@ -8,7 +8,6 @@ const NAV_ITEMS: ReadonlyArray<SidebarNavItem> = [
   { to: '/', label: 'Home', icon: 'home' },
   { to: '/datasources', label: 'Data Sources', icon: 'database' },
   { to: '/reports', label: 'Reports', icon: 'file-text' },
-  { to: '/styleguide', label: 'Style Guide', icon: 'palette' },
 ]
 
 const THEME_LABELS: Record<ThemeMode, string> = {

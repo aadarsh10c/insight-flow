@@ -92,15 +92,11 @@ When a CSV is uploaded, I show a column-config table: detected name, detected ty
 
 ## 5 · What I'd build next with another week
 
-In priority order:
+Three things, sized to fit a five-day week — not a wishlist. In priority order:
 
-1. **Deploy + share URL.** The brief requires a live URL — this is task #1 of week 2. Currently runs locally only.
-2. **Multi-widget reports.** Drag-and-drop chart layout on the report detail page. The data model already supports `reports[id].widgets[]`, so this is mostly UI: a grid library (`react-grid-layout`), persisted layout, per-widget edit dialog (already exists). One full day.
-3. **Computed columns.** A formula bar on data sources (`Revenue = Quantity * Price`). The single most-requested capability from the business users I spoke to during research. Done as a spreadsheet-style expression mini-language, not Python/SQL.
-4. **Cross-chart filtering.** Click a bar → all sibling widgets filter. This is the moment a "report" becomes a "dashboard" in the user's mind.
-5. **Saved filter presets per report.** "Last quarter", "this fiscal year", named.
-6. **Live data sources.** Polling a Google Sheets URL or a CSV URL. No DB connectors — that's an analyst feature, not a business-user one.
-7. **Export.** PNG / PDF for the chart, CSV for the underlying filtered rows.
+1. **Multi-widget reports.** Drag-and-drop chart layout on the report detail page. The data model already supports `reports[id].widgets[]`, so this is mostly UI: a grid library (`react-grid-layout`), persisted layout, per-widget edit dialog (already exists).
+2. **Computed columns.** A formula bar on data sources (`Revenue = Quantity * Price`). Closes the gap where a business user otherwise has to re-export their CSV from a spreadsheet just to derive one new field. Done as a spreadsheet-style expression mini-language — the syntax should match what the user already knows from Excel or Google Sheets, not Python or SQL.
+3. **Export.** PNG / PDF for the chart, CSV for the underlying filtered rows.
 
 What I would *not* build, even with a second week: AI prompt-to-chart, multi-user collaboration, in-app SQL. Each is a different product.
 
@@ -108,6 +104,15 @@ What I would *not* build, even with a second week: AI prompt-to-chart, multi-use
 
 ## 6 · How to evaluate this
 
-The thing I want evaluated most is the **Chart Builder dialog** — open any report, click "Add chart" or edit an existing one, and watch how much the system decides for you versus how much you decide. That dialog is where the design POV lives. Everything else is plumbing in service of it.
+Walk the full flow end-to-end — every screen is meant to be tried. A sample `Sample - Superstore.csv` is included in `/docs/` if you need a quick file.
 
-Secondary: open `/styleguide` to see the visual system, and read `ARCHITECTURE.md` for the structural choices.
+1. **Home (`/`).** Branded landing, full-screen, no sidebar. This is the only route without the shell — a deliberate choice so the app feels like it *starts* somewhere, not like a tool you're dropped into.
+2. **Data Sources (`/datasources`) → Add Data Source.** Upload the Superstore CSV. The dialog shows the column-config table — rename a column, ignore one you don't care about, override a detected type if it's wrong. This is the one technical moment exposed to the user; everything downstream inherits these decisions.
+3. **Reports (`/reports`) → Add Report.** Pick the data source you just uploaded, name the report, give it a short description. The report is created empty.
+4. **Report detail (`/reports/:id`) → Add chart.** This is the **main evaluation surface**. Walk the four steps of the Chart Builder dialog: pick a chart type (Line / Bar / Pie), configure what to show, optionally add a date or category filter, optionally style. Watch how much the system decides for you versus how much you decide — disabled options, smart column picker, live preview at every step, no "Apply" button.
+5. **Edit the same chart.** Click the chart's edit affordance and re-open the builder. Same dialog, same controls — no separate edit mode. Change the date range or chart type, save. The point is that *building* and *editing* are the same flow.
+6. **Try filters seriously.** Add a date-range filter on a date column (real calendar with year dropdown), a multi-select on a category column (searchable combobox), a numeric range on a number column. These are where most BI tools quietly hand the user a worse experience.
+7. **Theme toggle + collapsible sidebar.** Top-right theme toggle (light/dark only — no `'system'`, by design). Sidebar collapses to a 60px icon rail and remembers state across reloads.
+8. **`/styleguide`.** Every token, scale, and rule rendered live — colors, radii, shadows, typography, the components themselves. It exists as a forcing function: if a value isn't in here, it shouldn't appear in the product.
+
+For the structural reading, see `ARCHITECTURE.md` — component layout, the Zustand-store split, the IndexedDB adapter, and the two Mermaid diagrams (system overview + chart-builder sequence).

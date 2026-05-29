@@ -88,12 +88,6 @@ When a CSV is uploaded, I show a column-config table: detected name, detected ty
 
 **Cursor for inline edits.** Used for one-line refactors and rename-across-file where Claude Code would have been overkill.
 
-**Specific judgment calls I overrode:**
-
-- Claude proposed a `'system'` theme mode following OS preference. I removed it — adds a setting, doesn't change anything users actually do, and made the persistence migration harder.
-- Claude suggested lazy-loading Plotly. I tried it, found the bundle savings weren't worth the rendering flash, and reverted. The chunk is large; the user is already in a chart-building context. Loading eagerly is the right tradeoff here.
-- Claude wrote a localStorage→IndexedDB migration shim. I deleted it — for a one-week prototype the existing user has no production data, so the shim was carrying weight it didn't need to.
-
 ---
 
 ## 5 · What I'd build next with another week

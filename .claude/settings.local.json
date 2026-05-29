@@ -21,7 +21,15 @@
       "Bash(npm audit *)",
       "Bash(node -e \"console.log\\(require\\('xlsx'\\).version\\)\")",
       "WebFetch(domain:plotly.com)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "Bash(node -e \"const lr=require\\('lucide-react'\\); console.log\\('PanelLeftClose:', typeof lr.PanelLeftClose, 'PanelLeftOpen:', typeof lr.PanelLeftOpen, 'PanelLeft:', typeof lr.PanelLeft\\)\")",
+      "Bash(git check-ignore *)",
+      "Bash(git remote *)",
+      "PowerShell(Compress-Archive *)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(git push *)",
+      "WebFetch(domain:dev.to)"
     ]
   }
 }

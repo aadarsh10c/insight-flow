@@ -182,7 +182,13 @@ A small adapter (`lib/idb-storage.ts`) wires Zustand's `persist` middleware to I
 
 ---
 
-## 7 · Testing
+## 7 · Notable details
+
+- **Light and dark mode.** Two modes only (no `'system'`). The selected mode lives in the `theme` Zustand store, persists to localStorage, and is applied by toggling a `.dark` class on the root `<html>` element. Every token (colour, accent, border, ring) is a CSS custom property that swaps its value under the `.dark` selector — components use the same Tailwind utilities in both modes with no duplication. On first load with no stored value, the initial mode is read from `matchMedia('(prefers-color-scheme: dark)')` so the OS preference is respected once, but never tracked afterwards.
+
+---
+
+## 8 · Testing
 
 Tests cover the parts where bugs would silently produce wrong charts:
 

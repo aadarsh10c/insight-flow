@@ -82,7 +82,7 @@ When a CSV is uploaded, I show a column-config table: detected name, detected ty
 
 ## 4 · AI tools — what I used and where I overrode the output
 
-**Claude Code (Opus 4.7) — primary build partner.** Used for ~80% of code generation, all architecture iteration, and all of this writing. Worked best when I gave it a specific UX problem ("the calendar is touching the top of the screen and the year dropdown looks unstyled") and let it propose two or three options. Worked worst when I let it scope by itself — it tends to over-engineer (the first Plotly lazy-loading attempt was three layers of abstraction for something that needed a one-line unwrap). I learned to push back on premature abstraction explicitly: "the simple version, not the clever one."
+**Claude Code (Opus 4.7) — primary build partner.** Used for ~80% of code generation, all architecture iteration, and all of this writing. What pushed it past being a smarter autocomplete was its ecosystem of skills — specifically the **brainstorming** skill (which forces a real design conversation before any code is written) and the **writing-plans / executing-plans** pair, which turns every feature into a spec, then a checklist of bite-sized tasks, then execution. That workflow meant each piece of the app arrived as a documented decision and a reviewable diff, not a stream of patches I had to reverse-engineer. The honest tradeoff is cost: this style of work consumes tokens fast. For a one-week prototype that's the right scale; a multi-month project would force a stricter discipline about when to spin up the full skill workflow versus a single targeted prompt.
 
 **Figma + MCP for mockups.** Eight HTML mockups in `/docs/mockups/` were the source of truth for visual decisions before any code was written. Iterating in HTML rather than Figma was faster for me because the same artifact could be the spec *and* the visual reference.
 
@@ -93,11 +93,6 @@ When a CSV is uploaded, I show a column-config table: detected name, detected ty
 - Claude proposed a `'system'` theme mode following OS preference. I removed it — adds a setting, doesn't change anything users actually do, and made the persistence migration harder.
 - Claude suggested lazy-loading Plotly. I tried it, found the bundle savings weren't worth the rendering flash, and reverted. The chunk is large; the user is already in a chart-building context. Loading eagerly is the right tradeoff here.
 - Claude wrote a localStorage→IndexedDB migration shim. I deleted it — for a one-week prototype the existing user has no production data, so the shim was carrying weight it didn't need to.
-
-**What I didn't use:**
-
-- **v0 / Lovable** for UI generation. Both push toward a generic AI aesthetic — the rounded-corner card with a blurry gradient. I wanted a brand that looked chosen, not generated.
-- **GitHub Copilot.** I find it noisier than helpful in TypeScript projects with strict mode on; the ghost completions interrupt the type-checker feedback loop.
 
 ---
 

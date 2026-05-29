@@ -8,15 +8,15 @@
 
 ## 1 · The analysis — what I studied, what stood out
 
-I limited my study to **Looker Studio** (Google), **Power BI** (Microsoft), and **Metabase** because those three are the ones business users are actually handed at work. I spent a few hours each rebuilding the same chart in each tool — "sales by category over time" against a CSV — and watching where I, with full technical background, still hit friction.
+Per the brief, I limited my study to **Looker Studio** (Google). It's free, browser-based, the most likely tool an actual business user gets handed at work, and the one the brief explicitly calls out. I spent a few hours rebuilding the same chart against a CSV — "sales by category over time" — and watched where I, with full technical background, still hit friction. If I, an engineer, hesitate on a Looker screen, a business user is stuck.
 
-**Three observations changed the design:**
+**Three observations from Looker Studio changed the design:**
 
-**a) The blank canvas is the problem.** Looker Studio opens to an empty page and a sidebar of tools — dimensions, metrics, blend, calculated fields. The first decision the user is asked to make is a vocabulary decision. Power BI is the same. Metabase is gentler (their "Ask a Question" flow), but it still asks the user to choose between three modes on the first screen. A business user who came to answer a business question is now answering a UI question.
+**a) The blank canvas is the problem.** Looker Studio opens to an empty report page and a right-side panel of tools — Dimensions, Metrics, Date range dimension, Breakdown dimension, Sort, Filter, Blend data. The user's first decision isn't *what do I want to see*, it's *what does "dimension" mean here*. A business user who came to answer a business question is now answering a UI vocabulary question.
 
-**b) Data type is presented as the user's problem.** Every tool surfaces column types — `STRING`, `NUMBER`, `DATETIME`, `MEASURE`, `DIMENSION`. The user has to know that to chart something "over time" they need to drag the date *dimension* to the x-axis and a numeric *measure* to the y-axis. The chart suggestions are reactive (they show what's possible after the user picks columns), not generative (they don't tell the user what to do).
+**b) Data type is presented as the user's problem.** Looker surfaces column types — `Text`, `Number`, `Date`, plus the `Dimension` vs. `Metric` distinction. To chart something "over time" the user has to know that the date column goes in the *Date range dimension* slot and the numeric column goes in the *Metric* slot. The chart-type picker is reactive — it shows what's *possible* given the columns the user has dragged, not what they should *do*. The system never tells the user what to choose; it only tells them when they've chosen wrong.
 
-**c) "Editing later" is treated as a separate flow.** Once a chart is created, most tools have a distinct "edit mode" — different UI, different affordances. The mental model of *building* and *editing* is split. For a business user who comes back tomorrow and wants to tweak the date range, this is unnecessary friction.
+**c) "Editing later" is a separate flow.** Once a chart is created in Looker, editing it means clicking the chart, opening the right-side panel again, and using a slightly different surface — the create-time controls don't survive as the edit-time controls. For a business user who comes back tomorrow to tweak the date range, the mental model of *building* and *editing* is split. That split is unnecessary friction.
 
 **The decision I acted on:** invert the model. The user should never see a blank canvas, never need to know column types, and should be able to edit any field at any point in one continuous flow. The system makes the technical decisions; the user makes the business decisions.
 

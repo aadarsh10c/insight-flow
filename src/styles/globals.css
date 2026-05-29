@@ -117,6 +117,35 @@ html, body {
 }
 
 /* ============================================
+   Route view transitions
+   Browser View Transitions API — TanStack Router opts in via
+   defaultViewTransition. Chrome/Edge animate; Safari/Firefox no-op.
+   ============================================ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+::view-transition-old(root) {
+  animation-name: insightflow-route-fade-out;
+}
+::view-transition-new(root) {
+  animation-name: insightflow-route-fade-in;
+}
+@keyframes insightflow-route-fade-out {
+  to { opacity: 0; transform: translateY(-4px); }
+}
+@keyframes insightflow-route-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* ============================================
    Typography utilities (StyleGuide §4 — brand-first hierarchy)
    Brand "InsightFlow" at 16px is the largest text in the app.
    Nothing else exceeds it. One purpose per token.

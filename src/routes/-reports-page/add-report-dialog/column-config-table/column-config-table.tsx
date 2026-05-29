@@ -42,7 +42,7 @@ type RowProps = {
 
 const ColumnRow = ({ column, isIgnored, onLabel, onType, onIgnore }: RowProps) => (
   <TableRow className={cn(isIgnored && 'opacity-60')}>
-    <TableCell>
+    <TableCell className="align-top">
       <Input
         value={column.effectiveLabel}
         onChange={(e: ChangeEvent<HTMLInputElement>) => onLabel(column.name, e.target.value)}
@@ -50,7 +50,7 @@ const ColumnRow = ({ column, isIgnored, onLabel, onType, onIgnore }: RowProps) =
         className="h-8 text-xs"
       />
     </TableCell>
-    <TableCell className="min-w-[160px]">
+    <TableCell className="min-w-[160px] align-top">
       <div className="flex flex-col gap-1">
         <Select
           value={column.effectiveType}
@@ -74,7 +74,7 @@ const ColumnRow = ({ column, isIgnored, onLabel, onType, onIgnore }: RowProps) =
         )}
       </div>
     </TableCell>
-    <TableCell className="w-px whitespace-nowrap text-right">
+    <TableCell className="w-px whitespace-nowrap text-right align-top">
       <Button variant="ghost" size="sm" onClick={() => onIgnore(column.name)}>
         {isIgnored ? (
           <>
@@ -100,9 +100,9 @@ export const ColumnConfigTable = (props: ColumnConfigTableProps) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              <TableHead className="pl-7">Name</TableHead>
+              <TableHead className="pl-7">Type</TableHead>
+              <TableHead className="pr-7 text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
